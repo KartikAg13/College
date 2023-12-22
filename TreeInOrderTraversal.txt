@@ -1,0 +1,6 @@
+inOrder(x)
+    Input: x is the root of a subtree
+    if x != NULL then
+        inOrder(left(x));
+        output key(x);
+        inOrder(right(x));

@@ -1,0 +1,37 @@
+START at the root
+
+REPEAT until you reach a terminal node
+    
+    IF value at the node = search value THEN
+        found the element and return
+
+    IF search value < value at node THEN
+        move to left descendant
+    
+    ELSE
+        move to right descendant
+
+END REPEAT
+
+
+
+k: key that is being searched
+x: start node
+
+ITERATIVE:
+treeSearch(x, k)
+    while x != NULL and k != key[x]
+        do if k < key[x]
+            then x <- left[x]
+            else x <- right[x]
+    return x
+
+
+
+RECURSIVE:
+treeSearch(x, k)
+    if x = NULL or k = key[x] then
+        return x
+    if k < key[x] then
+        return treeSearch(left[x], k)
+    else return treeSearch(right[x], k)

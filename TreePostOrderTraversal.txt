@@ -1,0 +1,6 @@
+postOrder(x)
+    Input: x is the root of a subtree
+    if x != NULL then
+        postOrder(left(x));
+        postOrder(right(x));
+        output key(x);

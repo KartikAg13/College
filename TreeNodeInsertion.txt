@@ -1,0 +1,22 @@
+insert(root, value) {
+    if root == NULL then
+
+    Allocate the memory for the new node
+        set the value to root->data;
+        Set root->left = NULL;
+        Set root->right = NULL;
+        return root;
+
+    else if value < root->data then
+        set root->left = insert(root->left, value);
+        (Node needs to be inserted in left sub-tree. So,
+        recursively traverse left sub-tree to find the place
+        where the new node needs to be inserted)
+    
+    else if value >= root->data then
+        set root->right == insert(root->right, value);
+        (Node needs to be inserted in right sub-tree
+        So, recursively traverse right sub-tree to find the
+        place where the new node needs to be inserted)
+    return root;
+}
