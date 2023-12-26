@@ -1,0 +1,1 @@
+@py C:\Users\karti\OneDrive\Code\College\Python\map.py %*

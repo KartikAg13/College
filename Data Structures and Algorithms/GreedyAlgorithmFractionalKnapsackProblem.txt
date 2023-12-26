@@ -1,0 +1,22 @@
+fractionalKnapsack(w, v, W)
+    for i - 1 to n
+        do x[i] = 0
+    weight = 0
+    while weight < W
+        do i = best remaining item
+        if weight + w[i] <= W then
+            x[i] = 1
+            weight = weight + w[i]
+        else
+            x[i] = (W - weight) / w[i]
+            weight = W
+    return x
+
+
+
+Examples:
+1. Huffman Encoding Problem - Encode the data in a file to minimize its size
+2. Fractional Knapsack Problem - Collects the maximum value of the goods that fits in a given bucket
+3. Travelling Salesman Problem - Minimizes the total length of the trip
+4. Coin Change Problem - Counts to the desired value by choosing the least possible change
+5. Minimum Spanning Tree - Selects the smallest weight of edges to connect all the nodes in a graph

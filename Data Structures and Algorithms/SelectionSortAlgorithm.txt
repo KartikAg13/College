@@ -1,0 +1,16 @@
+selection sort(list, n)
+    /* list is an array of items and n is the size of the array */
+
+    for i = 1 to n - 1
+        min = i
+
+        for j = i + 1 to n
+            if list[j] < list[min] then
+                min = j;
+            end if
+        end for
+
+        if min != i then
+            swap list[min] and list[i]
+        end if
+    end for
