@@ -1,7 +1,11 @@
 {
     "files.associations": {
         "ostream": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "array": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "limits": "cpp"
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "strict"
