@@ -5,7 +5,8 @@
         "array": "cpp",
         "string": "cpp",
         "vector": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "*.tcc": "cpp"
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "strict"
