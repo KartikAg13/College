@@ -1,0 +1,27 @@
+* {
+    background-color: white;
+    text-align: center;
+}
+
+#main-heading {
+    font-size: 5rem;
+}
+
+ul {
+    display: block;
+    list-style-type: none;
+    margin-right: 50px;
+}
+
+.list-items {
+    height: 50px;
+    margin-bottom: 5px;
+    background-color: wheat;
+    padding-top: 25px;
+}
+
+.container {
+    border: 1px solid black;
+    width: 1000px;
+    margin-left: 100px;
+}
