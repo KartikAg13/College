@@ -6,7 +6,9 @@
         "string": "cpp",
         "vector": "cpp",
         "limits": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "new": "cpp",
+        "iosfwd": "cpp"
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "strict"
