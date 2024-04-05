@@ -1,0 +1,18 @@
+Mattress: 50
+Pillow: 50
+Bedsheet: 50
+Headphones: 50
+Charger: 50
+Power Bank: 50
+Chocolate: 50
+Chips: 100
+Biscuits: 50
+Flour: 50
+Milk: 100
+Fruits: 50
+Soaps: 50
+Toothpaste: 50
+Facewash: 50
+Sneaker: 100
+Sport: 100
+Sandal: 50
