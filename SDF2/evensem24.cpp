@@ -24,14 +24,14 @@ void displayQuestion(string &);
 string operator+(const string &, int);
 
 class Flashcard {
-    protected:
+    public:
     string file_name;
     int question_number;
     char tag;
     
     public:
     Flashcard() {
-        file_name = "/home/kartik/Projects/SDF2/";
+        file_name = "/home/kartik/Desktop/College/SDF2/";
         question_number = 0;
         tag = ' ';
     }
@@ -169,7 +169,7 @@ class Standard : public Flashcard {
         question = "";
         answer = "";
         tag = 'Q';
-        file_name = "/home/kartik/Projects/SDF2/Standard/";
+        file_name = "/home/kartik/Desktop/College/SDF2/Standard/";
     }
 
     //gets a randomNumber question from the file
@@ -221,7 +221,7 @@ class BothSide : public Flashcard {
     BothSide() {
         side = new string[2]();
         tag = '1';
-        file_name = "/home/kartik/Projects/SDF2/BothSide/";
+        file_name = "/home/kartik/Desktop/College/SDF2/BothSide/";
     }
 
     //gets a randomNumber question from the file
@@ -278,7 +278,7 @@ class TrueFalse : public Flashcard {
         statement = "";
         isTrue = true;
         tag = 'S';
-        file_name = "/home/kartik/Projects/SDF2/TrueFalse/";
+        file_name = "/home/kartik/Desktop/College/SDF2/TrueFalse/";
     }
 
     //gets a randomNumber question from the file
@@ -323,9 +323,10 @@ class TrueFalse : public Flashcard {
 class Deck : private Standard, private BothSide, private TrueFalse {
     private:
     int code;
+    vector <string> files_used;
     vector <Flashcard*> cards;
     int *sequence;
-    string question, answer, deck_name, temporary_file;
+    string question, answer, deck_name, temporary_file, temporary_file_name;
     static int counter; 
     unordered_map<string, string> pair;
 
@@ -334,12 +335,21 @@ class Deck : private Standard, private BothSide, private TrueFalse {
     Deck() {
         code = 0;
         sequence = new int[3]();
-        question = answer = "";
-        deck_name = temporary_file = "/home/kartik/Projects/SDF2/Deck/";
+        question = answer = " ";
+        deck_name = temporary_file = "//home/kartik/Desktop/College/SDF2/Deck/";
+    }
+
+    bool unique_file(string name) {
+        int length = files_used.size();
+        for(int index = 0; index < length; index++) {
+            if(name.find(files_used.at(index)) != string::npos)
+                return true;
+        }
+        return false;
     }
 
     bool search() {
-        ifstream file = openInputFile("/home/kartik/Projects/SDF2/deck_info.txt");
+        ifstream file = openInputFile("/home/kartik/Desktop/College/SDF2/deck_info.txt");
         string line;
         while(getline(file, line)) {
             if(stoi(line) == code) {
@@ -358,7 +368,7 @@ class Deck : private Standard, private BothSide, private TrueFalse {
         code = randomNumber(9999);
         if(code <= 1000 && !search())
             create();
-        ofstream file = openOutputFile("/home/kartik/Projects/SDF2/deck_info.txt");
+        ofstream file = openOutputFile("/home/kartik/Desktop/College/SDF2/deck_info.txt");
         file << code << endl;
         file.close();
         cout << "Creating a new empty deck" << endl;
@@ -374,7 +384,7 @@ class Deck : private Standard, private BothSide, private TrueFalse {
             cout << "0. Exit" << endl << "1. Standard" << endl << "2. Both Side" << endl << "3. True False" << endl;
             cin >> choice;
             counter = counter + 1;
-            file_name = (temporary_file + counter) + ".txt";
+            temporary_file_name = (temporary_file + counter) + ".txt";
             switch (choice) {
                 case 1:
                     cards.push_back(standard);
@@ -390,10 +400,6 @@ class Deck : private Standard, private BothSide, private TrueFalse {
                     cards.push_back(truefalse);
                     addFlashcard(truefalse);
                     break;
-
-                default: 
-                    cout << "Wrong input" << endl << "Try again" << endl;
-                    break;
             }
         } while(choice != 0);
         saveToFile();
@@ -401,6 +407,12 @@ class Deck : private Standard, private BothSide, private TrueFalse {
 
     void addFlashcard(Flashcard *card) {
         card->getFileName();
+        if(unique_file(card->file_name)) {
+            cout << "File has already been added" << endl;
+            addFlashcard(card);
+        }
+        else
+            files_used.push_back(card->file_name);
         sequence = card->randomSequence();
         int size = card->totalNumberOfQuestions();
         for(int index = 0; index < size; index++) {
@@ -412,18 +424,19 @@ class Deck : private Standard, private BothSide, private TrueFalse {
     }
 
     void add() {
-        ofstream file = openOutputFile(temporary_file);
+        ofstream file = openOutputFile(temporary_file_name);
         file << "Q: " << question << endl;
         file << answer << endl;
         file.close();
     }
 
+    //issue in this function
     void saveToFile() {
-        string line, name;
+        string line;
         vector<string> series;
-        for(int index = 1; index <= counter; index++) {
-            name = (temporary_file + index) + ".txt";
-            ifstream file = openInputFile(name);
+        for(int index = 1; index < counter; index++) {
+            temporary_file_name = (temporary_file + index) + ".txt";
+            ifstream file = openInputFile(temporary_file_name);
             while(getline(file, line)) {
                 if(line.at(0) == 'Q')
                     question = line;
@@ -432,7 +445,7 @@ class Deck : private Standard, private BothSide, private TrueFalse {
                     pair[question] = answer;
                 }
             }
-            remove(name.c_str());
+            remove(temporary_file_name.c_str());
         }
         ofstream file = openOutputFile(deck_name);
         series = shuffleQuestions();
@@ -446,6 +459,7 @@ class Deck : private Standard, private BothSide, private TrueFalse {
         file.close();
     }
 
+    //or maybe here is something wrong
     vector<string> shuffleQuestions() {
         vector<string> series;
         //for each loop
@@ -458,44 +472,154 @@ class Deck : private Standard, private BothSide, private TrueFalse {
         shuffle(series.begin(), series.end(), g);
         return series;
     }
-
-    void quiz() {
-        string line, name;
-        cout << "Please enter the name of the file: ";
-        getline(cin, name);
-        deck_name = deck_name + name;
-        ifstream file = openInputFile(deck_name);
-        while(getline(file, line)) {
-            if(line.find("exit") != string::npos) {
-                cout << "Thank you" << endl;
-                exit(0);
-            }
-            else if(line.at(0) == 'Q') {
-                displayQuestion(line);
-                getline(file, line);
-                cin >> answer;
-                if(line.find(answer) != string::npos)
-                    cout << "Correct" << endl;
-                else
-                    cout << "Wrong" << endl;
-            }
-        }
-    }
-
 };
 
 int Deck::counter = 0;
 
+class Quiz : private Deck {
+    protected:
+    string file_name, deck_location, question, answer;
+    unsigned int score;
+
+    public:
+    Quiz() {
+        file_name = question = answer = " ";
+        deck_location = "/home/kartik/Desktop/College/SDF2/Deck/";
+        score = 0;
+    }
+
+    void quiz() {
+        string line;
+        cout << "Please enter the name of the file: ";
+        getline(cin, file_name);
+        deck_location = deck_location + file_name;
+        ifstream file = openInputFile(deck_location);
+        while(getline(file, line)) {
+            if(line.at(0) == 'Q') {
+                displayQuestion(line);
+                getline(file, line);
+                cin >> answer;
+                if(line.find(answer) != string::npos)
+                    score = score + 1;
+                else
+                    continue;
+            }
+        }
+        file.close();
+    }
+};
+
+class User {
+    protected:
+    string username, password;
+
+    public:
+    User() {
+        username = password = " ";
+    }
+
+    void getUsername() {
+        cout << "Please enter the username: ";
+        cin >> username;
+    }
+
+    void getPassword() {
+        cout << "Please enter the password: ";
+        cin >> password;
+    }
+
+    void login() {
+        int found = 0;
+        getUsername();
+        getPassword();
+        ifstream file = openInputFile("/home/kartik/Desktop/College/SDF2/user.txt");
+        string line;
+        while(getline(file, line)) {
+            if(line.find(username) != string::npos && line.find(password) != string::npos) {
+                found = 1;
+                cout << "Welcome" << endl;
+                break;
+            }
+        }
+        file.close();
+        if(found == 0) {
+            cout << "Username or password is incorrect" << endl;
+            inputDetails();
+        }
+    }
+
+    bool checkAvailablity() {
+        ifstream file = openInputFile("/home/kartik/Desktop/College/SDF2/user.txt");
+        string line;
+        while(getline(file, line)) {
+            if(line.find(username) != string::npos) {
+                file.close();
+                return false;
+            }
+        }
+        file.close();
+        return true;
+    }
+    
+    //correct the way username and password is stored
+    void signUp() {
+        getUsername();
+        if(checkAvailablity() == false) {
+            cout << "Username already in use" << endl;
+            inputDetails();   
+        }
+        getPassword();
+        ofstream file = openOutputFile("/home/kartik/Desktop/College/SDF2/user.txt");
+        file << username << ": " << password << endl;
+        file.close();
+        cout << "Welcome" << endl;
+    }
+
+    void inputDetails() {
+        int choice = 0;
+        cout << "Choose one:" << endl << "0. Exit" << endl << "1. Login" << endl << "2. Sign Up" << endl;
+        cin >> choice;
+        if(choice == 1)
+            login();
+        else if(choice == 2)
+            signUp();
+        else {
+            cout << "Wrong input" << endl;
+            inputDetails();
+        }
+    }
+};
+
+class Statistics : private Quiz, private User {
+    private:
+    string file_location;
+
+    public:
+    Statistics() {
+        file_location = "/home/kartik/Desktop/College/SDF2/Statistics/";
+    }
+
+    void stats() {
+        file_location = file_location + file_name;
+        ofstream file = openOutputFile(file_name);
+        file << username << "\t" << score << endl;
+        file.close();
+    }
+};
+
 int main() {
     cout << "Standard" << endl;
-    Standard s;
+    //Standard s;
     //s.getQuestion();
     cout << "BothSide" << endl;
-    BothSide b;
+    //BothSide b;
     //b.getQuestion();
     cout << "TrueFalse" << endl;
-    TrueFalse t;
+    //TrueFalse t;
     //t.getQuestion();
-    //Deck::counter = 0;
+    User u;
+    u.inputDetails();
+    Deck d;
+    d.create();
     return 0;
 }
