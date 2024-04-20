@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <random>
 #include <unordered_map>
+#include <cctype>
 
 using namespace std;
 
@@ -519,13 +520,54 @@ class User {
     }
 
     void getUsername() {
+        cout << endl << "The username should start with a letter and should contain only letters and numbers" << endl;
         cout << "Please enter the username: ";
-        cin >> username;
+        //clear the buffer before the input
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        getline(cin, username);
+        if(username.empty() || isalpha(username.at(0)) == false) {
+            cerr << "Not allowed" << endl;
+            getUsername();
+        }
+        for(int index = 1; index < username.length(); index++) {
+            if(isalnum(username.at(index)) == false || username.at(index) == ' ') {
+                cerr << "Not allowed" << endl;
+                getUsername();
+            }
+        }
     }
 
     void getPassword() {
+        cout << endl << "The password should contain atleast 8 characters and should contain atleast one uppercase, one lowercase, one number and one special character" << endl;
         cout << "Please enter the password: ";
-        cin >> password;
+        //clear the buffer before the input
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        getline(cin, password);
+        if(password.empty() || password.length() < 8) {
+            cerr << "Not allowed" << endl;
+            getPassword();
+        }
+        int count[4] {0};
+        for(int index = 0; index < password.length(); index++) {
+            if(password.at(index) == ' ') {
+                cerr << "Not allowed" << endl;
+                getPassword();   
+            }
+            if(isupper(password.at(index)))
+                ++count[0];
+            else if(islower(password.at(index)))
+                ++count[1];
+            else if(isdigit(password.at(index)))
+                ++count[2];
+            else
+                ++count[3];
+        }
+        for(int index = 0; index > 4; index++) {
+            if(count[index] < 1) {
+                cerr << "Not allowed" << endl;
+                getPassword();
+            }
+        }
     }
 
     void login() {
@@ -593,6 +635,7 @@ class User {
 class Statistics : private Quiz, private User {
     private:
     string file_location;
+    unordered_map<string, int> list_of_scores;
 
     public:
     Statistics() {
@@ -602,8 +645,33 @@ class Statistics : private Quiz, private User {
     void stats() {
         file_location = file_location + file_name;
         ofstream file = openOutputFile(file_name);
-        file << username << "\t" << score << endl;
+        file << username << ": " << score << endl;
         file.close();
+    }
+
+    void displayStats() {
+        int position = 0;
+        string current_user;
+        string current_score;
+        vector<int> sorted_scores;
+        ifstream file = openInputFile(file_location);
+        string line;
+        while(getline(file, line)) {
+            position = line.find(" ");
+            current_user = line.substr(0, position - 1);    //not sure about this
+            current_score = line.substr(position + 1);
+            list_of_scores[current_user] = stoi(current_score);
+            sorted_scores.push_back(stoi(current_score));
+        }
+        file.close();
+        sort(sorted_scores.begin(), sorted_scores.end());
+        for(int index = 0; index < sorted_scores.size(); index++) {
+            //this is definetily wrong
+            for(auto it = list_of_scores.begin(); it != list_of_scores.end(); it++) {
+                if(it->second == sorted_scores.at(index))
+                    cout << it->first << ": " << it->second << endl;
+            }
+        }
     }
 };
 
