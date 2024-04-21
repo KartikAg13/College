@@ -24,31 +24,34 @@ void displayQuestion(string &);
 
 string operator+(const string &, int);
 
-class Flashcard {
+class Flashcard 
+{
     public:
     string file_name;
     int question_number;
     char tag;
     
     public:
-    Flashcard() {
+    Flashcard() 
+    {
         file_name = "/home/kartik/Desktop/College/SDF2/";
         question_number = 0;
         tag = ' ';
     }
 
-    virtual void add(const string &name) = 0;
-
-    void setQuestionNumber(int number) {
+    void setQuestionNumber(int number) 
+    {
         question_number = number;
     }
 
     //searches for the question and returns it
-    string findQuestion() {
+    string findQuestion() 
+    {
         ifstream file = openInputFile(file_name);
         string line, question;
         int index = 0;
-        while(getline(file, line) && index <= question_number) {
+        while(getline(file, line) && index <= question_number) 
+        {
             if(line.at(0) == tag)
                 index++;
             question = line;
@@ -58,11 +61,14 @@ class Flashcard {
     }
 
     //returns the answer
-    string findAnswer(const string &question) {
+    string findAnswer(const string &question) 
+    {
         ifstream file = openInputFile(file_name);
         string line, answer = "";
-        while(getline(file, line)) {
-            if(line.find(question) != string::npos) {
+        while(getline(file, line)) 
+        {
+            if(line.find(question) != string::npos) 
+            {
                 getline(file, line);
                 answer = line;
             }
@@ -72,7 +78,8 @@ class Flashcard {
     }
 
     //asks the user to enter the file
-    void getFileName() {
+    void getFileName() 
+    {
         string name;
         cout << "Please enter the file name: ";
         cin >> name;
@@ -80,11 +87,13 @@ class Flashcard {
     }
 
     //total number of questions in a file
-    int totalNumberOfQuestions() {
+    int totalNumberOfQuestions() 
+    {
         ifstream file = openInputFile(file_name);
         string line;
         int count = 0;
-        while(getline(file, line)) {
+        while(getline(file, line)) 
+        {
             if(line.at(0) == tag)
                 count++;
         }
@@ -93,27 +102,34 @@ class Flashcard {
     }
 
     //gives a random sequence of questions
-    int *randomSequence() {
+    int *randomSequence() 
+    {
         int size = totalNumberOfQuestions();
         int *array = new int[size]();
         int number = 0;
-        for(int index = 0; index < size; index++) {
+        for(int index = 0; index < size; index++) 
+        {
             number = randomNumber(size);
             if(!found(array, number, index))
                 array[index] = number;
-            else {
+            else 
+            {
                 index--;
                 continue;
             }
         }
         return array;
     }
+
+    virtual void add(const string &name) = 0;
 };
 
 //returns the file in read mode
-ifstream openInputFile(const string &name) {
+ifstream openInputFile(const string &name) 
+{
     ifstream file(name);
-    if(!file.is_open()) {
+    if(!file.is_open()) 
+    {
         cerr << "Error opening file at location: " << name << endl;
         exit(1);
     }
@@ -121,9 +137,11 @@ ifstream openInputFile(const string &name) {
 }
 
 //returns the file in append mode
-ofstream openOutputFile(const string &name) {
+ofstream openOutputFile(const string &name) 
+{
     ofstream file(name, ios::app);
-    if(!file.is_open()) {
+    if(!file.is_open()) 
+    {
         cerr << "Error opening file at location: " << name << endl;
         exit(1);
     }
@@ -131,8 +149,10 @@ ofstream openOutputFile(const string &name) {
 }
 
 //checks if the a question is already asked or not
-bool found(int *array, int search, int size) {
-    for(int index = 0; index < size; index++) {
+bool found(int *array, int search, int size) 
+{
+    for(int index = 0; index < size; index++) 
+    {
         if(array[index] == search)
             return true;
     }
@@ -140,33 +160,39 @@ bool found(int *array, int search, int size) {
 }
 
 //generates a random number between 0 and maximum
-int randomNumber(int maximum) {
+int randomNumber(int maximum) 
+{
     srand(time(nullptr));
     return rand() % maximum;
 }
 
 //formats the question before question
-void displayQuestion(string &question) {
+void displayQuestion(string &question) 
+{
     int index = question.find(" ");
-    if(index == string::npos) {
+    if(index == string::npos) 
+    {
         cout << "Something is not right" << endl;
         exit(1);
     }
     cout << question.substr(index + 1) << endl;
 }
 
-string operator+(const string &name, int number) {
+string operator+(const string &name, int number) 
+{
     return name + to_string(number);
 }
 
-class Standard : public Flashcard {
+class Standard : public Flashcard 
+{
     private:
     string question;
     string answer;
 
     public:
     //default constructor
-    Standard() {
+    Standard() 
+    {
         question = "";
         answer = "";
         tag = 'Q';
@@ -174,18 +200,21 @@ class Standard : public Flashcard {
     }
 
     //gets a randomNumber question from the file
-    void getQuestion() {
+    void getQuestion() 
+    {
         getFileName();
         string input;
         int size = totalNumberOfQuestions();
         int *array = new int[size];
         array = randomSequence();
-        for(int index = 0; index < size; index++) {
+        for(int index = 0; index < size; index++) 
+        {
             question_number = array[index];
             question = findQuestion();
             displayQuestion(question);
             cin >> input;
-            if(input.find("exit") != string::npos) {
+            if(input.find("exit") != string::npos) 
+            {
                 cout << "Thank you" << endl;
                 exit(0);
             }
@@ -199,7 +228,8 @@ class Standard : public Flashcard {
     }
 
     //adds a new question to the file
-    void add(const string &name) {
+    void add(const string &name) 
+    {
         ofstream file = openOutputFile(name);
         string line;
         cout << "Please enter the question: ";
@@ -213,31 +243,36 @@ class Standard : public Flashcard {
     }
 };
 
-class BothSide : public Flashcard {
+class BothSide : public Flashcard 
+{
     private:
     string *side;
 
     public:
     //default constructor
-    BothSide() {
+    BothSide() 
+    {
         side = new string[2]();
         tag = '1';
         file_name = "/home/kartik/Desktop/College/SDF2/BothSide/";
     }
 
     //gets a randomNumber question from the file
-    void getQuestion() {
+    void getQuestion() 
+    {
         getFileName();
         string input;
         int size = totalNumberOfQuestions();
         int *array = new int[size];
         array = randomSequence();
-        for(int index = 0; index < size; index++) {
+        for(int index = 0; index < size; index++) 
+        {
             question_number = array[index];
             side[0] = findQuestion();
             displayQuestion(side[0]);
             cin >> input;
-            if(input.find("exit") != string::npos) {
+            if(input.find("exit") != string::npos) 
+            {
                 cout << "Thank you" << endl;
                 exit(0);
             }
@@ -251,7 +286,8 @@ class BothSide : public Flashcard {
     }       
 
     //adds a sides to the file
-    void add(const string &name) {
+    void add(const string &name) 
+    {
         ofstream file = openOutputFile(name);
         string line;
         cout << "Please enter the side 1: ";
@@ -264,18 +300,21 @@ class BothSide : public Flashcard {
         cout << "Successful" << endl;
     }
 
-    ~BothSide() {
+    ~BothSide() 
+    {
         delete [] side;
     }
 };
 
-class TrueFalse : public Flashcard {
+class TrueFalse : public Flashcard 
+{
     private:
     string statement, isTrue;
 
     public:
     //default constructor
-    TrueFalse() {
+    TrueFalse() 
+    {
         statement = "";
         isTrue = true;
         tag = 'S';
@@ -283,18 +322,21 @@ class TrueFalse : public Flashcard {
     }
 
     //gets a randomNumber question from the file
-    void getQuestion() {
+    void getQuestion() 
+    {
         getFileName();
         int size = totalNumberOfQuestions();
         int *array = new int[size];
         array = randomSequence();
         string input;
-        for(int index = 0; index < size; index++) {
+        for(int index = 0; index < size; index++) 
+        {
             question_number = array[index];
             statement = findQuestion();
             displayQuestion(statement);
             cin >> input;
-            if(input.find("exit") != string::npos) {
+            if(input.find("exit") != string::npos) 
+            {
                 cout << "Thank you" << endl;
                 exit(0);
             }
@@ -307,7 +349,8 @@ class TrueFalse : public Flashcard {
         delete [] array;
     }
 
-    void add(const string &name) {
+    void add(const string &name) 
+    {
         ofstream file = openOutputFile(name);
         string line;
         cout << "Please enter a statement: ";
@@ -321,7 +364,8 @@ class TrueFalse : public Flashcard {
     }
 };
 
-class Deck : private Standard, private BothSide, private TrueFalse {
+class Deck : private Standard, private BothSide, private TrueFalse 
+{
     private:
     int code;
     vector <string> files_used;
@@ -333,27 +377,33 @@ class Deck : private Standard, private BothSide, private TrueFalse {
 
     public:
     //make changes as soon as possible
-    Deck() {
+    Deck() 
+    {
         code = 0;
         sequence = new int[3]();
         question = answer = " ";
         deck_name = temporary_file = "//home/kartik/Desktop/College/SDF2/Deck/";
     }
 
-    bool unique_file(string name) {
+    bool unique_file(string name) 
+    {
         int length = files_used.size();
-        for(int index = 0; index < length; index++) {
+        for(int index = 0; index < length; index++) 
+        {
             if(name.find(files_used.at(index)) != string::npos)
                 return true;
         }
         return false;
     }
 
-    bool search() {
+    bool search() 
+    {
         ifstream file = openInputFile("/home/kartik/Desktop/College/SDF2/deck_info.txt");
         string line;
-        while(getline(file, line)) {
-            if(stoi(line) == code) {
+        while(getline(file, line)) 
+        {
+            if(stoi(line) == code) 
+            {
                 file.close();
                 return true;
             }
@@ -363,7 +413,8 @@ class Deck : private Standard, private BothSide, private TrueFalse {
     }
 
     //make a array of strings which keeps track of all the files already used in the deck
-    void create() {
+    void create() 
+    {
         int choice = 0;
         string name, file_name;
         code = randomNumber(9999);
@@ -380,13 +431,15 @@ class Deck : private Standard, private BothSide, private TrueFalse {
         BothSide *bothside = new BothSide();
         TrueFalse *truefalse = new TrueFalse();
         cout << "We have three types of flashcards" << endl;
-        do {
+        do 
+        {
             cout << "Choose" << endl;
             cout << "0. Exit" << endl << "1. Standard" << endl << "2. Both Side" << endl << "3. True False" << endl;
             cin >> choice;
             counter = counter + 1;
             temporary_file_name = (temporary_file + counter) + ".txt";
-            switch (choice) {
+            switch (choice) 
+            {
                 case 1:
                     cards.push_back(standard);
                     addFlashcard(standard);
@@ -406,9 +459,11 @@ class Deck : private Standard, private BothSide, private TrueFalse {
         saveToFile();
     }
 
-    void addFlashcard(Flashcard *card) {
+    void addFlashcard(Flashcard *card) 
+    {
         card->getFileName();
-        if(unique_file(card->file_name)) {
+        if(unique_file(card->file_name)) 
+        {
             cout << "File has already been added" << endl;
             addFlashcard(card);
         }
@@ -416,7 +471,8 @@ class Deck : private Standard, private BothSide, private TrueFalse {
             files_used.push_back(card->file_name);
         sequence = card->randomSequence();
         int size = card->totalNumberOfQuestions();
-        for(int index = 0; index < size; index++) {
+        for(int index = 0; index < size; index++) 
+        {
             card->setQuestionNumber(sequence[index]);
             question = card->findQuestion();
             answer = card->findAnswer(question);
@@ -424,7 +480,8 @@ class Deck : private Standard, private BothSide, private TrueFalse {
         }
     }
 
-    void add() {
+    void add() 
+    {
         ofstream file = openOutputFile(temporary_file_name);
         file << "Q: " << question << endl;
         file << answer << endl;
@@ -432,16 +489,20 @@ class Deck : private Standard, private BothSide, private TrueFalse {
     }
 
     //issue in this function
-    void saveToFile() {
+    void saveToFile() 
+    {
         string line;
         vector<string> series;
-        for(int index = 1; index < counter; index++) {
+        for(int index = 1; index < counter; index++) 
+        {
             temporary_file_name = (temporary_file + index) + ".txt";
             ifstream file = openInputFile(temporary_file_name);
-            while(getline(file, line)) {
+            while(getline(file, line)) 
+            {
                 if(line.at(0) == 'Q')
                     question = line;
-                else {
+                else 
+                {
                     answer = line;
                     pair[question] = answer;
                 }
@@ -450,9 +511,11 @@ class Deck : private Standard, private BothSide, private TrueFalse {
         }
         ofstream file = openOutputFile(deck_name);
         series = shuffleQuestions();
-        for(int index = 0; index < series.size(); index++) {
+        for(int index = 0; index < series.size(); index++) 
+        {
             auto it = pair.find(series.at(index));
-            if(it != pair.end()) {
+            if(it != pair.end()) 
+            {
                 file << "Q: " << it->first << endl;
                 file << it->second << endl;
             }
@@ -461,7 +524,8 @@ class Deck : private Standard, private BothSide, private TrueFalse {
     }
 
     //or maybe here is something wrong
-    vector<string> shuffleQuestions() {
+    vector<string> shuffleQuestions() 
+    {
         vector<string> series;
         //for each loop
         for(const auto &value: pair)
@@ -477,26 +541,31 @@ class Deck : private Standard, private BothSide, private TrueFalse {
 
 int Deck::counter = 0;
 
-class Quiz : private Deck {
+class Quiz : private Deck 
+{
     protected:
     string file_name, deck_location, question, answer;
     unsigned int score;
 
     public:
-    Quiz() {
+    Quiz() 
+    {
         file_name = question = answer = " ";
         deck_location = "/home/kartik/Desktop/College/SDF2/Deck/";
         score = 0;
     }
 
-    void quiz() {
+    void quiz() 
+    {
         string line;
         cout << "Please enter the name of the file: ";
         getline(cin, file_name);
         deck_location = deck_location + file_name;
         ifstream file = openInputFile(deck_location);
-        while(getline(file, line)) {
-            if(line.at(0) == 'Q') {
+        while(getline(file, line)) 
+        {
+            if(line.at(0) == 'Q') 
+            {
                 displayQuestion(line);
                 getline(file, line);
                 cin >> answer;
@@ -510,46 +579,56 @@ class Quiz : private Deck {
     }
 };
 
-class User {
+class User 
+{
     protected:
     string username, password;
 
     public:
-    User() {
+    User() 
+    {
         username = password = " ";
     }
 
-    void getUsername() {
+    void getUsername() 
+    {
         cout << endl << "The username should start with a letter and should contain only letters and numbers" << endl;
         cout << "Please enter the username: ";
         //clear the buffer before the input
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         getline(cin, username);
-        if(username.empty() || isalpha(username.at(0)) == false) {
+        if(username.empty() || isalpha(username.at(0)) == false) 
+        {
             cerr << "Not allowed" << endl;
             getUsername();
         }
-        for(int index = 1; index < username.length(); index++) {
-            if(isalnum(username.at(index)) == false || username.at(index) == ' ') {
+        for(int index = 1; index < username.length(); index++) 
+        {
+            if(isalnum(username.at(index)) == false || username.at(index) == ' ') 
+            {
                 cerr << "Not allowed" << endl;
                 getUsername();
             }
         }
     }
 
-    void getPassword() {
+    void getPassword() 
+    {
         cout << endl << "The password should contain atleast 8 characters and should contain atleast one uppercase, one lowercase, one number and one special character" << endl;
         cout << "Please enter the password: ";
         //clear the buffer before the input
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         getline(cin, password);
-        if(password.empty() || password.length() < 8) {
+        if(password.empty() || password.length() < 8) 
+        {
             cerr << "Not allowed" << endl;
             getPassword();
         }
         int count[4] {0};
-        for(int index = 0; index < password.length(); index++) {
-            if(password.at(index) == ' ') {
+        for(int index = 0; index < password.length(); index++) 
+        {
+            if(password.at(index) == ' ') 
+            {
                 cerr << "Not allowed" << endl;
                 getPassword();   
             }
@@ -562,8 +641,10 @@ class User {
             else
                 ++count[3];
         }
-        for(int index = 0; index > 4; index++) {
-            if(count[index] < 1) {
+        for(int index = 0; index > 4; index++) 
+        {
+            if(count[index] < 1) 
+            {
                 cerr << "Not allowed" << endl;
                 getPassword();
             }
@@ -576,25 +657,31 @@ class User {
         getPassword();
         ifstream file = openInputFile("/home/kartik/Desktop/College/SDF2/user.txt");
         string line;
-        while(getline(file, line)) {
-            if(line.find(username) != string::npos && line.find(password) != string::npos) {
+        while(getline(file, line)) 
+        {
+            if(line.find(username) != string::npos && line.find(password) != string::npos) 
+            {
                 found = 1;
                 cout << "Welcome" << endl;
                 break;
             }
         }
         file.close();
-        if(found == 0) {
+        if(found == 0) 
+        {
             cout << "Username or password is incorrect" << endl;
             inputDetails();
         }
     }
 
-    bool checkAvailablity() {
+    bool checkAvailablity() 
+    {
         ifstream file = openInputFile("/home/kartik/Desktop/College/SDF2/user.txt");
         string line;
-        while(getline(file, line)) {
-            if(line.find(username) != string::npos) {
+        while(getline(file, line)) 
+        {
+            if(line.find(username) != string::npos) 
+            {
                 file.close();
                 return false;
             }
@@ -604,9 +691,11 @@ class User {
     }
     
     //correct the way username and password is stored
-    void signUp() {
+    void signUp() 
+    {
         getUsername();
-        if(checkAvailablity() == false) {
+        if(checkAvailablity() == false) 
+        {
             cout << "Username already in use" << endl;
             inputDetails();   
         }
@@ -617,7 +706,8 @@ class User {
         cout << "Welcome" << endl;
     }
 
-    void inputDetails() {
+    void inputDetails() 
+    {
         int choice = 0;
         cout << "Choose one:" << endl << "0. Exit" << endl << "1. Login" << endl << "2. Sign Up" << endl;
         cin >> choice;
@@ -625,38 +715,44 @@ class User {
             login();
         else if(choice == 2)
             signUp();
-        else {
+        else 
+        {
             cout << "Wrong input" << endl;
             inputDetails();
         }
     }
 };
 
-class Statistics : private Quiz, private User {
+class Statistics : private Quiz, private User 
+{
     private:
     string file_location;
     unordered_map<string, int> list_of_scores;
 
     public:
-    Statistics() {
+    Statistics() 
+    {
         file_location = "/home/kartik/Desktop/College/SDF2/Statistics/";
     }
 
-    void stats() {
+    void stats() 
+    {
         file_location = file_location + file_name;
         ofstream file = openOutputFile(file_name);
         file << username << ": " << score << endl;
         file.close();
     }
 
-    void displayStats() {
+    void displayStats() 
+    {
         int position = 0;
         string current_user;
         string current_score;
         vector<int> sorted_scores;
         ifstream file = openInputFile(file_location);
         string line;
-        while(getline(file, line)) {
+        while(getline(file, line)) 
+        {
             position = line.find(" ");
             current_user = line.substr(0, position - 1);    //not sure about this
             current_score = line.substr(position + 1);
@@ -665,9 +761,11 @@ class Statistics : private Quiz, private User {
         }
         file.close();
         sort(sorted_scores.begin(), sorted_scores.end());
-        for(int index = 0; index < sorted_scores.size(); index++) {
+        for(int index = 0; index < sorted_scores.size(); index++) 
+        {
             //this is definetily wrong
-            for(auto it = list_of_scores.begin(); it != list_of_scores.end(); it++) {
+            for(auto it = list_of_scores.begin(); it != list_of_scores.end(); it++) 
+            {
                 if(it->second == sorted_scores.at(index))
                     cout << it->first << ": " << it->second << endl;
             }
@@ -675,7 +773,8 @@ class Statistics : private Quiz, private User {
     }
 };
 
-int main() {
+int main() 
+{
     cout << "Standard" << endl;
     //Standard s;
     //s.getQuestion();
