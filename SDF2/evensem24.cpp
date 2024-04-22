@@ -813,5 +813,35 @@ class Statistics : private Quiz, private User
 
 int main() 
 {
+    int choice = 0;
+    cout << "Welcome to the flashcard application" << endl;
+    cout << "Choose one:" << endl << "0. Exit" << endl << "1. User" << endl << "2. Deck" << endl << "3. Quiz" << endl << "4. Statistics" << endl;
+    cin >> choice;
+    User user;
+    Deck deck;
+    Quiz quiz;
+    Statistics stats;
+    switch (choice) 
+    {
+        case 1:
+            user.inputDetails();
+            break;
+
+        case 2:
+            deck.create();
+            break;
+
+        case 3:
+            quiz.quiz();
+            break;
+
+        case 4:
+            stats.displayStats();
+            break;
+
+        default:
+            cout << "Wrong input" << endl;
+            break;
+    }
     return 0;
 }
