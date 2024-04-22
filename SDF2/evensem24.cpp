@@ -83,6 +83,7 @@ class Flashcard
         string name;
         cout << "Please enter the file name: ";
         cin >> name;
+        
         file_name = file_name + name;
     }
 
@@ -178,6 +179,14 @@ void displayQuestion(string &question)
     cout << question.substr(index + 1) << endl;
 }
 
+//generates a random number between 0 and maximum
+int randomNumber(int maximum) 
+{
+    srand(time(nullptr));
+    return rand() % maximum;
+}
+
+//concatenates a string and a number
 string operator+(const string &name, int number) 
 {
     return name + to_string(number);
@@ -349,6 +358,7 @@ class TrueFalse : public Flashcard
         delete [] array;
     }
 
+    //adds a statement to the file
     void add(const string &name) 
     {
         ofstream file = openOutputFile(name);
@@ -377,6 +387,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
 
     public:
     //make changes as soon as possible
+    //default constructor
     Deck() 
     {
         code = 0;
@@ -385,7 +396,8 @@ class Deck : private Standard, private BothSide, private TrueFalse
         deck_name = temporary_file = "//home/kartik/Desktop/College/SDF2/Deck/";
     }
 
-    bool unique_file(string name) 
+    //checks if the file is unique or not
+    bool uniqueFile(string name) 
     {
         int length = files_used.size();
         for(int index = 0; index < length; index++) 
@@ -462,7 +474,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
     void addFlashcard(Flashcard *card) 
     {
         card->getFileName();
-        if(unique_file(card->file_name)) 
+        if(uniqueFile(card->file_name)) 
         {
             cout << "File has already been added" << endl;
             addFlashcard(card);
@@ -523,19 +535,34 @@ class Deck : private Standard, private BothSide, private TrueFalse
         file.close();
     }
 
-    //or maybe here is something wrong
-    vector<string> shuffleQuestions() 
-    {
+    //shuffles the questions
+    vector<string> shuffleQuestions() {
         vector<string> series;
-        //for each loop
+        vector<string> solution;
         for(const auto &value: pair)
             series.push_back(value.first);
-        //Seed for the random number engine
-        random_device rd;
-        //Mersenne Twister engine for randomness   
-        mt19937 g(rd());    
-        shuffle(series.begin(), series.end(), g);
-        return series;
+        int size = series.size();
+        int *array = new int[size];
+        int number = 0;
+        for(int index = 0; index < size; index++)
+        {
+            number = randomNumber(size);
+            if(!found(array, number, index)) {
+                array[index] = number;
+                solution.push_back(series.at(number));
+            }
+            else {
+                index--;
+                continue;
+            }
+        }
+        return solution;
+    }
+
+    //destructor
+    ~Deck() 
+    {
+        delete [] sequence;
     }
 };
 
@@ -548,6 +575,7 @@ class Quiz : private Deck
     unsigned int score;
 
     public:
+    //default constructor
     Quiz() 
     {
         file_name = question = answer = " ";
@@ -555,6 +583,7 @@ class Quiz : private Deck
         score = 0;
     }
 
+    //displays the question
     void quiz() 
     {
         string line;
@@ -585,11 +614,13 @@ class User
     string username, password;
 
     public:
+    //default constructor
     User() 
     {
         username = password = " ";
     }
 
+    //checks if the username is valid or not
     void getUsername() 
     {
         cout << endl << "The username should start with a letter and should contain only letters and numbers" << endl;
@@ -612,6 +643,7 @@ class User
         }
     }
 
+    //checks if the password is valid or not
     void getPassword() 
     {
         cout << endl << "The password should contain atleast 8 characters and should contain atleast one uppercase, one lowercase, one number and one special character" << endl;
@@ -651,6 +683,7 @@ class User
         }
     }
 
+    //logs in the user
     void login() {
         int found = 0;
         getUsername();
@@ -674,6 +707,7 @@ class User
         }
     }
 
+    //checks if the username is already in use
     bool checkAvailablity() 
     {
         ifstream file = openInputFile("/home/kartik/Desktop/College/SDF2/user.txt");
@@ -690,7 +724,7 @@ class User
         return true;
     }
     
-    //correct the way username and password is stored
+    //sign up the user
     void signUp() 
     {
         getUsername();
@@ -706,6 +740,7 @@ class User
         cout << "Welcome" << endl;
     }
 
+    //input the details
     void inputDetails() 
     {
         int choice = 0;
@@ -730,11 +765,13 @@ class Statistics : private Quiz, private User
     unordered_map<string, int> list_of_scores;
 
     public:
+    //default constructor
     Statistics() 
     {
         file_location = "/home/kartik/Desktop/College/SDF2/Statistics/";
     }
 
+    //stores the stats in the file
     void stats() 
     {
         file_location = file_location + file_name;
@@ -743,6 +780,7 @@ class Statistics : private Quiz, private User
         file.close();
     }
 
+    //display the stats in the order of the scores
     void displayStats() 
     {
         int position = 0;
@@ -775,18 +813,5 @@ class Statistics : private Quiz, private User
 
 int main() 
 {
-    cout << "Standard" << endl;
-    //Standard s;
-    //s.getQuestion();
-    cout << "BothSide" << endl;
-    //BothSide b;
-    //b.getQuestion();
-    cout << "TrueFalse" << endl;
-    //TrueFalse t;
-    //t.getQuestion();
-    User u;
-    u.inputDetails();
-    Deck d;
-    d.create();
     return 0;
 }
