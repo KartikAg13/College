@@ -1,0 +1,12 @@
+Q: age?
+20
+Q: try
+catch
+Q: hello
+bye
+Q: name?
+kartik
+Q: hello?
+hi
+Q: name
+surname

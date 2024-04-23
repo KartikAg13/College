@@ -517,7 +517,15 @@ class Deck : private Standard, private BothSide, private TrueFalse
                 }
                 else 
                 {
-                    answer = line;
+                    if(line.at(0) == '2')
+                    {
+                        int position = line.find(" ");
+                        string ans;
+                        ans = line.substr(position + 1);
+                        answer = ans;
+                    }
+                    else
+                        answer = line;
                     pair[question] = answer;
                 }
             }
