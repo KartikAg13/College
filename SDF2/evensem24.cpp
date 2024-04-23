@@ -24,6 +24,8 @@ void displayQuestion(string &);
 
 string operator+(const string &, int);
 
+void start();
+
 class Flashcard 
 {
     public:
@@ -179,13 +181,6 @@ void displayQuestion(string &question)
     cout << question.substr(index + 1) << endl;
 }
 
-//generates a random number between 0 and maximum
-int randomNumber(int maximum) 
-{
-    srand(time(nullptr));
-    return rand() % maximum;
-}
-
 //concatenates a string and a number
 string operator+(const string &name, int number) 
 {
@@ -309,6 +304,7 @@ class BothSide : public Flashcard
         cout << "Successful" << endl;
     }
 
+    //destructor
     ~BothSide() 
     {
         delete [] side;
@@ -436,7 +432,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
         file << code << endl;
         file.close();
         cout << "Creating a new empty deck" << endl;
-        cout << "Please enter the name of the deck: " << endl;
+        cout << "Please enter the name of the deck:";
         cin >> name;
         deck_name = deck_name + name;
         Standard *standard = new Standard();
@@ -469,6 +465,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
             }
         } while(choice != 0);
         saveToFile();
+        start();
     }
 
     void addFlashcard(Flashcard *card) 
@@ -495,7 +492,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
     void add() 
     {
         ofstream file = openOutputFile(temporary_file_name);
-        file << "Q: " << question << endl;
+        file << question << endl;
         file << answer << endl;
         file.close();
     }
@@ -511,8 +508,13 @@ class Deck : private Standard, private BothSide, private TrueFalse
             ifstream file = openInputFile(temporary_file_name);
             while(getline(file, line)) 
             {
-                if(line.at(0) == 'Q')
-                    question = line;
+                if(line.at(0) == 'Q' || line.at(0) == '1' || line.at(0) == 'S')
+                {
+                    int position = line.find(" ");
+                    string ques;
+                    ques = line.substr(position + 1);
+                    question = "Q: " + ques;
+                }
                 else 
                 {
                     answer = line;
@@ -528,7 +530,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
             auto it = pair.find(series.at(index));
             if(it != pair.end()) 
             {
-                file << "Q: " << it->first << endl;
+                file << it->first << endl;
                 file << it->second << endl;
             }
         }
@@ -624,9 +626,9 @@ class User
     void getUsername() 
     {
         cout << endl << "The username should start with a letter and should contain only letters and numbers" << endl;
-        cout << "Please enter the username: ";
+        cout << "Please enter the username:";
         //clear the buffer before the input
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         getline(cin, username);
         if(username.empty() || isalpha(username.at(0)) == false) 
         {
@@ -647,12 +649,11 @@ class User
     void getPassword() 
     {
         cout << endl << "The password should contain atleast 8 characters and should contain atleast one uppercase, one lowercase, one number and one special character" << endl;
-        cout << "Please enter the password: ";
-        //clear the buffer before the input
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "Please enter the password:";
         getline(cin, password);
         if(password.empty() || password.length() < 8) 
         {
+            cout << "1" << endl;
             cerr << "Not allowed" << endl;
             getPassword();
         }
@@ -661,6 +662,7 @@ class User
         {
             if(password.at(index) == ' ') 
             {
+                cout << "2" << endl;
                 cerr << "Not allowed" << endl;
                 getPassword();   
             }
@@ -673,10 +675,11 @@ class User
             else
                 ++count[3];
         }
-        for(int index = 0; index > 4; index++) 
+        for(int index = 0; index < 4; index++) 
         {
             if(count[index] < 1) 
             {
+                cout << "3" << endl;
                 cerr << "Not allowed" << endl;
                 getPassword();
             }
@@ -755,8 +758,10 @@ class User
             cout << "Wrong input" << endl;
             inputDetails();
         }
+        start(); 
     }
 };
+
 
 class Statistics : private Quiz, private User 
 {
@@ -809,39 +814,60 @@ class Statistics : private Quiz, private User
             }
         }
     }
+
+    //destructor
+    ~Statistics() 
+    {
+        list_of_scores.clear();
+    }
 };
 
-int main() 
+//starts the application
+void start() 
 {
     int choice = 0;
-    cout << "Welcome to the flashcard application" << endl;
-    cout << "Choose one:" << endl << "0. Exit" << endl << "1. User" << endl << "2. Deck" << endl << "3. Quiz" << endl << "4. Statistics" << endl;
+    cout << "Choose one:" << endl << "0. Exit" << endl << "1. Deck" << endl << "2. Quiz" << endl << "3. Stats" << endl;
     cin >> choice;
-    User user;
     Deck deck;
     Quiz quiz;
     Statistics stats;
     switch (choice) 
     {
         case 1:
-            user.inputDetails();
-            break;
-
-        case 2:
             deck.create();
             break;
 
-        case 3:
+        case 2:
             quiz.quiz();
             break;
 
-        case 4:
+        case 3:
             stats.displayStats();
             break;
 
         default:
             cout << "Wrong input" << endl;
             break;
+    }
+}
+
+int main() 
+{
+    int choice = 0;
+    cout << "Welcome to the flashcard application" << endl;
+    cout << "Choose one:" << endl << "0. Exit" << endl << "1. User" << endl;
+    cin >> choice;
+    if(choice == 1) 
+    {
+        User user;
+        user.inputDetails();
+    }
+    else if(choice == 0)
+        cout << "Thank you" << endl;
+    else 
+    {
+        cout << "Wrong input" << endl;
+        main();
     }
     return 0;
 }

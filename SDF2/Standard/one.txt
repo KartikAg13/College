@@ -2,5 +2,5 @@ Q: name?
 kartik
 Q: age?
 20
-Q: hello
-bye
+Q: hello?
+hi
