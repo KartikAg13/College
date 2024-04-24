@@ -1,6 +1,0 @@
-1: hello
-2: bye
-1: name
-2: surname
-1: try
-2: catch

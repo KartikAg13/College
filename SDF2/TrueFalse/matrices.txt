@@ -1,0 +1,10 @@
+S: Singular matrix has a determinant of 1
+false
+S: Symmetric matrix is equal to its transpose
+true
+S: Rank of a matrix is zero when it is a null matrix
+true
+S: Solution of homogeneous system of equations does not exist
+false
+S: When D = 0, we get non-trivial solution
+false

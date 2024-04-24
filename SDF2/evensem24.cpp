@@ -24,7 +24,7 @@ void displayQuestion(string &);
 
 string operator+(const string &, int);
 
-void start();
+void start(string);
 
 class Flashcard 
 {
@@ -34,6 +34,7 @@ class Flashcard
     char tag;
     
     public:
+    //default constructor
     Flashcard() 
     {
         file_name = "/home/kartik/Desktop/College/SDF2/";
@@ -41,6 +42,7 @@ class Flashcard
         tag = ' ';
     }
 
+    
     void setQuestionNumber(int number) 
     {
         question_number = number;
@@ -85,7 +87,6 @@ class Flashcard
         string name;
         cout << "Please enter the file name: ";
         cin >> name;
-        
         file_name = file_name + name;
     }
 
@@ -373,7 +374,6 @@ class TrueFalse : public Flashcard
 class Deck : private Standard, private BothSide, private TrueFalse 
 {
     private:
-    int code;
     vector <string> files_used;
     vector <Flashcard*> cards;
     int *sequence;
@@ -386,10 +386,9 @@ class Deck : private Standard, private BothSide, private TrueFalse
     //default constructor
     Deck() 
     {
-        code = 0;
         sequence = new int[3]();
         question = answer = " ";
-        deck_name = temporary_file = "//home/kartik/Desktop/College/SDF2/Deck/";
+        deck_name = temporary_file = "/home/kartik/Desktop/College/SDF2/Deck/";
     }
 
     //checks if the file is unique or not
@@ -404,33 +403,11 @@ class Deck : private Standard, private BothSide, private TrueFalse
         return false;
     }
 
-    bool search() 
-    {
-        ifstream file = openInputFile("/home/kartik/Desktop/College/SDF2/deck_info.txt");
-        string line;
-        while(getline(file, line)) 
-        {
-            if(stoi(line) == code) 
-            {
-                file.close();
-                return true;
-            }
-        }
-        file.close();
-        return false;
-    }
-
     //make a array of strings which keeps track of all the files already used in the deck
     void create() 
     {
         int choice = 0;
         string name, file_name;
-        code = randomNumber(9999);
-        if(code <= 1000 && !search())
-            create();
-        ofstream file = openOutputFile("/home/kartik/Desktop/College/SDF2/deck_info.txt");
-        file << code << endl;
-        file.close();
         cout << "Creating a new empty deck" << endl;
         cout << "Please enter the name of the deck:";
         cin >> name;
@@ -465,7 +442,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
             }
         } while(choice != 0);
         saveToFile();
-        start();
+        start(" ");
     }
 
     void addFlashcard(Flashcard *card) 
@@ -546,7 +523,8 @@ class Deck : private Standard, private BothSide, private TrueFalse
     }
 
     //shuffles the questions
-    vector<string> shuffleQuestions() {
+    vector<string> shuffleQuestions() 
+    {
         vector<string> series;
         vector<string> solution;
         for(const auto &value: pair)
@@ -557,11 +535,13 @@ class Deck : private Standard, private BothSide, private TrueFalse
         for(int index = 0; index < size; index++)
         {
             number = randomNumber(size);
-            if(!found(array, number, index)) {
+            if(!found(array, number, index)) 
+            {
                 array[index] = number;
                 solution.push_back(series.at(number));
             }
-            else {
+            else 
+            {
                 index--;
                 continue;
             }
@@ -580,11 +560,10 @@ int Deck::counter = 0;
 
 class Quiz : private Deck 
 {
-    protected:
-    string file_name, deck_location, question, answer;
-    unsigned int score;
-
     public:
+    string file_name, deck_location, question, answer;
+    int score;
+
     //default constructor
     Quiz() 
     {
@@ -598,22 +577,35 @@ class Quiz : private Deck
     {
         string line;
         cout << "Please enter the name of the file: ";
-        getline(cin, file_name);
+        cin >> file_name;
         deck_location = deck_location + file_name;
         ifstream file = openInputFile(deck_location);
         while(getline(file, line)) 
         {
+            cout << endl;
             if(line.at(0) == 'Q') 
             {
                 displayQuestion(line);
                 getline(file, line);
                 cin >> answer;
+                if(answer.find("exit") != string::npos) 
+                {
+                    cout << "Thank you" << endl;
+                    start(" ");
+                }
                 if(line.find(answer) != string::npos)
+                {
+                    cout << "Correct" << endl;
                     score = score + 1;
+                }
                 else
-                    continue;
+                {
+                    cout << "Wrong" << endl;
+                    cout << "The correct answer is: " << line << endl;
+                }
             }
         }
+        cout << "Your score is: " << score << endl;
         file.close();
     }
 };
@@ -661,7 +653,6 @@ class User
         getline(cin, password);
         if(password.empty() || password.length() < 8) 
         {
-            cout << "1" << endl;
             cerr << "Not allowed" << endl;
             getPassword();
         }
@@ -670,7 +661,6 @@ class User
         {
             if(password.at(index) == ' ') 
             {
-                cout << "2" << endl;
                 cerr << "Not allowed" << endl;
                 getPassword();   
             }
@@ -687,7 +677,6 @@ class User
         {
             if(count[index] < 1) 
             {
-                cout << "3" << endl;
                 cerr << "Not allowed" << endl;
                 getPassword();
             }
@@ -766,18 +755,19 @@ class User
             cout << "Wrong input" << endl;
             inputDetails();
         }
-        start(); 
+        start(username); 
     }
+
+    friend void start();
 };
 
 
-class Statistics : private Quiz, private User 
+class Statistics : public Quiz, public User 
 {
-    private:
+    public:
     string file_location;
     unordered_map<string, int> list_of_scores;
 
-    public:
     //default constructor
     Statistics() 
     {
@@ -785,11 +775,13 @@ class Statistics : private Quiz, private User
     }
 
     //stores the stats in the file
-    void stats() 
+    void stats(Quiz &quiz, string name) 
     {
+        score = quiz.score; 
+        string file_name = quiz.file_name;
         file_location = file_location + file_name;
-        ofstream file = openOutputFile(file_name);
-        file << username << ": " << score << endl;
+        ofstream file = openOutputFile(file_location);
+        file << name << ": " << score << endl;
         file.close();
     }
 
@@ -800,12 +792,16 @@ class Statistics : private Quiz, private User
         string current_user;
         string current_score;
         vector<int> sorted_scores;
+        string name;
+        cout << "Please enter the name of the file: ";
+        cin >> name;
+        file_location = file_location + name;
         ifstream file = openInputFile(file_location);
         string line;
         while(getline(file, line)) 
         {
             position = line.find(" ");
-            current_user = line.substr(0, position - 1);    //not sure about this
+            current_user = line.substr(0, position - 1);
             current_score = line.substr(position + 1);
             list_of_scores[current_user] = stoi(current_score);
             sorted_scores.push_back(stoi(current_score));
@@ -814,7 +810,6 @@ class Statistics : private Quiz, private User
         sort(sorted_scores.begin(), sorted_scores.end());
         for(int index = 0; index < sorted_scores.size(); index++) 
         {
-            //this is definetily wrong
             for(auto it = list_of_scores.begin(); it != list_of_scores.end(); it++) 
             {
                 if(it->second == sorted_scores.at(index))
@@ -831,7 +826,7 @@ class Statistics : private Quiz, private User
 };
 
 //starts the application
-void start() 
+void start(string name = " ") 
 {
     int choice = 0;
     cout << "Choose one:" << endl << "0. Exit" << endl << "1. Deck" << endl << "2. Quiz" << endl << "3. Stats" << endl;
@@ -847,6 +842,7 @@ void start()
 
         case 2:
             quiz.quiz();
+            stats.stats(quiz, name);
             break;
 
         case 3:
@@ -861,6 +857,7 @@ void start()
 
 int main() 
 {
+    /*
     int choice = 0;
     cout << "Welcome to the flashcard application" << endl;
     cout << "Choose one:" << endl << "0. Exit" << endl << "1. User" << endl;
@@ -878,4 +875,5 @@ int main()
         main();
     }
     return 0;
+    */
 }

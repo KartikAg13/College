@@ -1,0 +1,10 @@
+Q: Formula for interference in wedge shaped films
+2ut*cos(r+theta)
+Q: What is the formula of fringe width in YDSE
+lambda*D/d
+Q: What are the angles of Biprism
+179 30' 30'
+Q: What is the minimum intensity if I1 and I2 are same
+0
+Q: How is intensity related to R
+R^2
