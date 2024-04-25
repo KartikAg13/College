@@ -138,10 +138,7 @@ ifstream openInputFile(const string &name)
 {
     ifstream file(name);
     if(!file.is_open()) 
-    {
-        cerr << "Error opening file at location: " << name << endl;
-        exit(1);
-    }
+        throw ("Error opening file at location: " + name);
     return file;
 }
 
@@ -150,10 +147,7 @@ ofstream openOutputFile(const string &name)
 {
     ofstream file(name, ios::app);
     if(!file.is_open()) 
-    {
-        cerr << "Error opening file at location: " << name << endl;
-        exit(1);
-    }
+        throw ("Error opening file at location: " + name);
     return file;
 }
 
@@ -180,10 +174,7 @@ void displayQuestion(string &question)
 {
     int index = question.find(" ");
     if(index == string::npos) 
-    {
-        cout << "Something is not right" << endl;
-        exit(1);
-    }
+        throw ("Error displaying");
     cout << question.substr(index + 1) << endl;
 }
 
@@ -240,8 +231,11 @@ class Standard : public Flashcard
     //adds a new question to the file
     void add(const string &name) 
     {
+        system("clear");
         ofstream file = openOutputFile(name);
         string line;
+        //clear the buffer before the input
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Please enter the question: ";
         getline(cin, line);
         file << "Q: " << line << endl;
@@ -298,8 +292,11 @@ class BothSide : public Flashcard
     //adds a sides to the file
     void add(const string &name) 
     {
+        system("clear");
         ofstream file = openOutputFile(name);
         string line;
+        //clear the buffer before the input
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Please enter the side 1: ";
         getline(cin, line);
         file << "1: " << line << endl;
@@ -363,8 +360,11 @@ class TrueFalse : public Flashcard
     //adds a statement to the file
     void add(const string &name) 
     {
+        system("clear");
         ofstream file = openOutputFile(name);
         string line;
+        //clear the buffer before the input
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Please enter a statement: ";
         getline(cin, line);
         file << "S: " << line << endl;
@@ -847,96 +847,124 @@ class Statistics : public Quiz, public User
 
 int main() 
 {
-    int choice = 0;
-    system("clear");
-    cout << "Welcome to the Flashcard application" << endl;
-    cout << "Choose one: " << endl << "\t0. Exit" << endl << "\t1. User" << endl << "\t2. Add Flashcards" << endl;
-    cin >> choice;
-    if(choice == 0)
+    try
     {
+        int choice = 0;
         system("clear");
-        cout << "Thank you" << endl;
-        exit(0);
+        cout << "Welcome to the Flashcard application" << endl;
+        cout << "Choose one: " << endl << "\t0. Exit" << endl << "\t1. User" << endl << "\t2. Add Flashcards" << endl;
+        cin >> choice;
+        if(choice == 0)
+        {
+            system("clear");
+            cout << "Thank you" << endl;
+            exit(0);
+        }
+        else if(choice == 1)
+        {
+            User user;
+            user.inputDetails();
+        }
+        else if(choice == 2)
+            option();
+        else
+            throw "Wrong input";
     }
-    else if(choice == 1)
+    catch(const char *name) 
     {
-        User user;
-        user.inputDetails();
-    }
-    else if(choice == 2)
-        option();
-    else
+        cout << name << endl;
+        sleep(2);
         main();
+    }
     return 0;
 }
 
 //starts the application
 void start(string name = " ") 
 {
-    int choice = 0;
-    system("clear");
-    cout << "Choose one:" << endl << "\t0. Exit" << endl << "\t1. Deck" << endl << "\t2. Quiz" << endl << "\t3. Stats" << endl;
-    cin >> choice;
-    Deck deck;
-    Quiz quiz;
-    Statistics stats;
-    switch (choice) 
+    try
     {
-        case 0:
-        main();
-        break;
+        int choice = 0;
+        system("clear");
+        cout << "Choose one:" << endl << "\t0. Exit" << endl << "\t1. Deck" << endl << "\t2. Quiz" << endl << "\t3. Stats" << endl;
+        cin >> choice;
+        Deck deck;
+        Quiz quiz;
+        Statistics stats;
+        switch (choice) 
+        {
+            case 0:
+            main();
+            break;
 
-        case 1:
-        deck.create();
-        break;
+            case 1:
+            deck.create();
+            break;
 
-        case 2:
-        quiz.quiz();
-        stats.stats(quiz, name);
-        break;
+            case 2:
+            quiz.quiz();
+            stats.stats(quiz, name);
+            break;
 
-        case 3:
-        stats.displayStats();
-        break;
+            case 3:
+            stats.displayStats();
+            break;
 
-        default:
+            default:
+            start(name);
+            break;
+        }
+    }
+    catch(const char *str)
+    {
+        cout << str << endl;
         start(name);
-        break;
     }
 }
 
 void option()
 {
-    int choice = 0;
-    system("clear");
-    cout << "Choose one: " << endl << "\t0. Exit" << endl << "\t1. Standard Flashcard" << endl << "\t2. Both Side Flashcard" << endl << "\t3. True False Flashcard" << endl;
-    cin >> choice;
-    Standard standard;
-    BothSide both_side;
-    TrueFalse true_false;
-    switch (choice)
+    try
     {
-        case 0:
-        main();
-        break;
+        int choice = 0;
+        system("clear");
+        cout << "Choose one: " << endl << "\t0. Exit" << endl << "\t1. Standard Flashcard" << endl << "\t2. Both Side Flashcard" << endl << "\t3. True False Flashcard" << endl;
+        cin >> choice;
+        Standard standard;
+        BothSide both_side;
+        TrueFalse true_false;
+        switch (choice)
+        {
+            case 0:
+            main();
+            break;
 
-        case 1:
-        standard.getFileName();
-        standard.add(standard.file_name);
-        break;
+            case 1:
+            standard.getFileName();
+            standard.add(standard.file_name);
+            main();
+            break;
 
-        case 2:
-        both_side.getFileName();
-        both_side.add(both_side.file_name);
-        break;
-        
-        case 3:
-        true_false.getFileName();
-        true_false.add(true_false.file_name);
-        break;
+            case 2:
+            both_side.getFileName();
+            both_side.add(both_side.file_name);
+            main();
+            break;
+            
+            case 3:
+            true_false.getFileName();
+            true_false.add(true_false.file_name);
+            main();
+            break;
 
-        default:
+            default:
+            option();
+            break;
+        }
+    }
+    catch(const char *name)
+    {
+        cout << name << endl;
         option();
-        break;
     }
 }
