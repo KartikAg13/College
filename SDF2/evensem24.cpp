@@ -26,6 +26,8 @@ string operator+(const string &, int);
 
 void start(string);
 
+void option();
+
 class Flashcard 
 {
     public:
@@ -41,8 +43,8 @@ class Flashcard
         question_number = 0;
         tag = ' ';
     }
-
     
+    //gets the file name
     void setQuestionNumber(int number) 
     {
         question_number = number;
@@ -382,7 +384,6 @@ class Deck : private Standard, private BothSide, private TrueFalse
     unordered_map<string, string> pair;
 
     public:
-    //make changes as soon as possible
     //default constructor
     Deck() 
     {
@@ -403,7 +404,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
         return false;
     }
 
-    //make a array of strings which keeps track of all the files already used in the deck
+    //creates a new deck
     void create() 
     {
         int choice = 0;
@@ -445,6 +446,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
         start(" ");
     }
 
+    //adds a flashcard to the deck
     void addFlashcard(Flashcard *card) 
     {
         card->getFileName();
@@ -466,6 +468,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
         }
     }
 
+    //adds the question and answer to the file
     void add() 
     {
         ofstream file = openOutputFile(temporary_file_name);
@@ -474,7 +477,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
         file.close();
     }
 
-    //issue in this function
+    //saves the deck to a file
     void saveToFile() 
     {
         string line;
@@ -825,6 +828,30 @@ class Statistics : public Quiz, public User
     }
 };
 
+int main() 
+{
+    int choice = 0;
+    cout << "Welcome to the Flashcard application" << endl;
+    cout << "Choose one: " << endl << "1. User" << "2. Add Flashcards" << endl;
+    cin >> choice;
+    if(choice == 1)
+    {
+        system("cls");
+        User user;
+        user.inputDetails();
+    }
+    else if(choice == 2)
+    {
+        system("cls");
+        option();
+    }
+    else
+    {
+        cout << "Wrong choice" << endl;
+        main();
+    }
+}
+
 //starts the application
 void start(string name = " ") 
 {
@@ -855,25 +882,39 @@ void start(string name = " ")
     }
 }
 
-int main() 
+void option()
 {
-    /*
     int choice = 0;
-    cout << "Welcome to the flashcard application" << endl;
-    cout << "Choose one:" << endl << "0. Exit" << endl << "1. User" << endl;
+    cout << "Choose one: " << endl << "0. Exit" << endl << "1. Standard Flashcard" << endl << "2. Both Side Flashcard" << endl << "3. True False Flashcard" << endl;
     cin >> choice;
-    if(choice == 1) 
+    Standard standard;
+    BothSide both_side;
+    TrueFalse true_false;
+    switch (choice)
     {
-        User user;
-        user.inputDetails();
-    }
-    else if(choice == 0)
-        cout << "Thank you" << endl;
-    else 
-    {
-        cout << "Wrong input" << endl;
+        case 0:
+        cout << "Thank You" << endl;
         main();
+        break;
+
+        case 1:
+        standard.getFileName();
+        standard.add(standard.file_name);
+        break;
+
+        case 2:
+        both_side.getFileName();
+        both_side.add(both_side.file_name);
+        break;
+        
+        case 3:
+        true_false.getFileName();
+        true_false.add(true_false.file_name);
+        break;
+
+        default:
+        cout << "Wrong choice" << endl;
+        option();
+        break;
     }
-    return 0;
-    */
 }
