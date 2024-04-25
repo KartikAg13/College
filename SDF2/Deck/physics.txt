@@ -1,0 +1,18 @@
+Q: Visibility
+(Imax - Imin) / (Imax + Imin)
+Q: Path difference for YDSE
+yd/D
+Q: What is the formula of fringe width in YDSE
+lambda*D/d
+Q: What is the minimum intensity if I1 and I2 are same
+0
+Q: r1 + r2 = 0
+t1*t2 = 1 - r^2
+Q: Formula for minima in MI
+2d*cos(theta)
+Q: Formula for interference in wedge shaped films
+2ut*cos(r+theta)
+Q: Central fringe
+Brightest fringe
+Q: How is intensity related to R
+R^2

@@ -1,0 +1,3 @@
+kartik: 6
+hansi: 4
+asmi: 5

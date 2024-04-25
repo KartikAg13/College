@@ -9,6 +9,7 @@
 #include <random>
 #include <unordered_map>
 #include <cctype>
+#include <unistd.h>
 
 using namespace std;
 
@@ -27,6 +28,8 @@ string operator+(const string &, int);
 void start(string);
 
 void option();
+
+int main();
 
 class Flashcard 
 {
@@ -409,8 +412,9 @@ class Deck : private Standard, private BothSide, private TrueFalse
     {
         int choice = 0;
         string name, file_name;
+        system("clear");
         cout << "Creating a new empty deck" << endl;
-        cout << "Please enter the name of the deck:";
+        cout << endl << "Please enter the name of the deck:";
         cin >> name;
         deck_name = deck_name + name;
         Standard *standard = new Standard();
@@ -419,11 +423,12 @@ class Deck : private Standard, private BothSide, private TrueFalse
         cout << "We have three types of flashcards" << endl;
         do 
         {
-            cout << "Choose" << endl;
-            cout << "0. Exit" << endl << "1. Standard" << endl << "2. Both Side" << endl << "3. True False" << endl;
+            system("clear");
+            cout << "Choose one:" << endl << "\t0. Exit" << endl << "\t1. Standard Flashcard" << endl << "\t2. Both Side Flashcard" << endl << "\t3. True False Flashcard" << endl;
             cin >> choice;
             counter = counter + 1;
             temporary_file_name = (temporary_file + counter) + ".txt";
+            system("clear");
             switch (choice) 
             {
                 case 1:
@@ -579,6 +584,7 @@ class Quiz : private Deck
     void quiz() 
     {
         string line;
+        system("clear");
         cout << "Please enter the name of the file: ";
         cin >> file_name;
         deck_location = deck_location + file_name;
@@ -588,6 +594,7 @@ class Quiz : private Deck
             cout << endl;
             if(line.at(0) == 'Q') 
             {
+                system("clear");
                 displayQuestion(line);
                 getline(file, line);
                 cin >> answer;
@@ -600,14 +607,23 @@ class Quiz : private Deck
                 {
                     cout << "Correct" << endl;
                     score = score + 1;
+                    sleep(1);
                 }
                 else
                 {
                     cout << "Wrong" << endl;
                     cout << "The correct answer is: " << line << endl;
+                    sleep(2);
                 }
             }
         }
+        cout << "Calculating score.";
+        sleep(1);
+        cout << ".";
+        sleep(1);
+        cout << ".";
+        sleep(1);
+        system("clear");
         cout << "Your score is: " << score << endl;
         file.close();
     }
@@ -698,7 +714,7 @@ class User
             if(line.find(username) != string::npos && line.find(password) != string::npos) 
             {
                 found = 1;
-                cout << "Welcome" << endl;
+                cout << endl << "Welcome" << endl;
                 break;
             }
         }
@@ -747,23 +763,23 @@ class User
     void inputDetails() 
     {
         int choice = 0;
-        cout << "Choose one:" << endl << "0. Exit" << endl << "1. Login" << endl << "2. Sign Up" << endl;
+        system("clear");
+        cout << "Choose one:" << endl << "\t0. Exit" << endl << "\t1. Login" << endl << "\t2. Sign Up" << endl;
         cin >> choice;
+        system("clear");
         if(choice == 1)
             login();
         else if(choice == 2)
             signUp();
-        else 
-        {
-            cout << "Wrong input" << endl;
+        else if(choice == 0)
+            main();
+        else
             inputDetails();
-        }
         start(username); 
     }
 
     friend void start();
 };
-
 
 class Statistics : public Quiz, public User 
 {
@@ -791,6 +807,7 @@ class Statistics : public Quiz, public User
     //display the stats in the order of the scores
     void displayStats() 
     {
+        system("clear");
         int position = 0;
         string current_user;
         string current_score;
@@ -831,61 +848,68 @@ class Statistics : public Quiz, public User
 int main() 
 {
     int choice = 0;
+    system("clear");
     cout << "Welcome to the Flashcard application" << endl;
-    cout << "Choose one: " << endl << "1. User" << "2. Add Flashcards" << endl;
+    cout << "Choose one: " << endl << "\t0. Exit" << endl << "\t1. User" << endl << "\t2. Add Flashcards" << endl;
     cin >> choice;
-    if(choice == 1)
+    if(choice == 0)
     {
-        system("cls");
+        system("clear");
+        cout << "Thank you" << endl;
+        exit(0);
+    }
+    else if(choice == 1)
+    {
         User user;
         user.inputDetails();
     }
     else if(choice == 2)
-    {
-        system("cls");
         option();
-    }
     else
-    {
-        cout << "Wrong choice" << endl;
         main();
-    }
+    return 0;
 }
 
 //starts the application
 void start(string name = " ") 
 {
     int choice = 0;
-    cout << "Choose one:" << endl << "0. Exit" << endl << "1. Deck" << endl << "2. Quiz" << endl << "3. Stats" << endl;
+    system("clear");
+    cout << "Choose one:" << endl << "\t0. Exit" << endl << "\t1. Deck" << endl << "\t2. Quiz" << endl << "\t3. Stats" << endl;
     cin >> choice;
     Deck deck;
     Quiz quiz;
     Statistics stats;
     switch (choice) 
     {
+        case 0:
+        main();
+        break;
+
         case 1:
-            deck.create();
-            break;
+        deck.create();
+        break;
 
         case 2:
-            quiz.quiz();
-            stats.stats(quiz, name);
-            break;
+        quiz.quiz();
+        stats.stats(quiz, name);
+        break;
 
         case 3:
-            stats.displayStats();
-            break;
+        stats.displayStats();
+        break;
 
         default:
-            cout << "Wrong input" << endl;
-            break;
+        start(name);
+        break;
     }
 }
 
 void option()
 {
     int choice = 0;
-    cout << "Choose one: " << endl << "0. Exit" << endl << "1. Standard Flashcard" << endl << "2. Both Side Flashcard" << endl << "3. True False Flashcard" << endl;
+    system("clear");
+    cout << "Choose one: " << endl << "\t0. Exit" << endl << "\t1. Standard Flashcard" << endl << "\t2. Both Side Flashcard" << endl << "\t3. True False Flashcard" << endl;
     cin >> choice;
     Standard standard;
     BothSide both_side;
@@ -893,7 +917,6 @@ void option()
     switch (choice)
     {
         case 0:
-        cout << "Thank You" << endl;
         main();
         break;
 
@@ -913,7 +936,6 @@ void option()
         break;
 
         default:
-        cout << "Wrong choice" << endl;
         option();
         break;
     }
