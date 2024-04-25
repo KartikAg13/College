@@ -47,7 +47,7 @@ class Flashcard
         tag = ' ';
     }
     
-    //gets the file name
+    //sets the question number
     void setQuestionNumber(int number) 
     {
         question_number = number;
@@ -214,13 +214,13 @@ class Standard : public Flashcard
             question = findQuestion();
             displayQuestion(question);
             cin >> input;
-            if(input.find("exit") != string::npos) 
+            if(input == "exit") 
             {
                 cout << "Thank you" << endl;
                 exit(0);
             }
             answer = findAnswer(question);
-            if(answer.find(input) != string::npos)
+            if(answer == input)
                 cout << "Correct" << endl;
             else 
                 cout << "Wrong" << endl;
@@ -275,13 +275,13 @@ class BothSide : public Flashcard
             side[0] = findQuestion();
             displayQuestion(side[0]);
             cin >> input;
-            if(input.find("exit") != string::npos) 
+            if(input == "exit") 
             {
                 cout << "Thank you" << endl;
                 exit(0);
             }
             side[1] = findAnswer(side[0]);
-            if(side[1].find(input) != string::npos)
+            if(side[1] == input)
                 cout << "Correct" << endl;
             else
                 cout << "Wrong" << endl;
@@ -343,13 +343,13 @@ class TrueFalse : public Flashcard
             statement = findQuestion();
             displayQuestion(statement);
             cin >> input;
-            if(input.find("exit") != string::npos) 
+            if(input == "exit") 
             {
                 cout << "Thank you" << endl;
                 exit(0);
             }
             isTrue = findAnswer(statement);
-            if(isTrue.find(input) != string::npos)
+            if(isTrue == input)
                 cout << "Correct" << endl;
             else
                 cout << "Wrong" << endl;
@@ -401,7 +401,7 @@ class Deck : private Standard, private BothSide, private TrueFalse
         int length = files_used.size();
         for(int index = 0; index < length; index++) 
         {
-            if(name.find(files_used.at(index)) != string::npos)
+            if(name == files_used.at(index))
                 return true;
         }
         return false;
@@ -598,12 +598,12 @@ class Quiz : private Deck
                 displayQuestion(line);
                 getline(file, line);
                 cin >> answer;
-                if(answer.find("exit") != string::npos) 
+                if(answer == "exit") 
                 {
                     cout << "Thank you" << endl;
                     start(" ");
                 }
-                if(line.find(answer) != string::npos)
+                if(line == answer)
                 {
                     cout << "Correct" << endl;
                     score = score + 1;
@@ -662,6 +662,7 @@ class User
                 getUsername();
             }
         }
+        cout << endl << "Username entered successfully" << endl;
     }
 
     //checks if the password is valid or not
@@ -700,6 +701,7 @@ class User
                 getPassword();
             }
         }
+        cout << endl << "Password entered successfully" << endl;
     }
 
     //logs in the user
@@ -715,6 +717,7 @@ class User
             {
                 found = 1;
                 cout << endl << "Welcome" << endl;
+                sleep(1);
                 break;
             }
         }
@@ -750,6 +753,7 @@ class User
         if(checkAvailablity() == false) 
         {
             cout << "Username already in use" << endl;
+            sleep(2);
             inputDetails();   
         }
         getPassword();
@@ -757,6 +761,7 @@ class User
         file << username << ": " << password << endl;
         file.close();
         cout << "Welcome" << endl;
+        sleep(1);
     }
 
     //input the details
@@ -918,6 +923,7 @@ void start(string name = " ")
     catch(const char *str)
     {
         cout << str << endl;
+        sleep(2);
         start(name);
     }
 }
@@ -965,6 +971,7 @@ void option()
     catch(const char *name)
     {
         cout << name << endl;
+        sleep(2);
         option();
     }
 }
