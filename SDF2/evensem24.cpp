@@ -138,7 +138,7 @@ ifstream openInputFile(const string &name)
 {
     ifstream file(name);
     if(!file.is_open()) 
-        throw ("Error opening file at location: " + name);
+        throw runtime_error("Error opening file at location: " + name);
     return file;
 }
 
@@ -147,7 +147,7 @@ ofstream openOutputFile(const string &name)
 {
     ofstream file(name, ios::app);
     if(!file.is_open()) 
-        throw ("Error opening file at location: " + name);
+        throw runtime_error("Error opening file at location: " + name);
     return file;
 }
 
@@ -878,6 +878,12 @@ int main()
     catch(const char *name) 
     {
         cout << name << endl;
+        sleep(2);
+        main();
+    }
+    catch(const runtime_error &e)
+    {
+        cout << e.what() << endl;
         sleep(2);
         main();
     }
