@@ -1,52 +1,60 @@
 #include<iostream>
+#include<stack>
 #include<vector>
-#include<map>
 using namespace std;
-int main(){
-    vector<int>v;
-    int num;
-    cout<<"enter the number of elements";
-    cin>>num;
-    int element;
-    for(int i=0;i<num;i++){
-        cout<<"enter the element";
-        cin>>element;
-        v.push_back(element);
-    }
-    map<int,int>m;
-    int count=0;
-    for(int i=0;i<v.size();i++){
-        if(m.find(v[i]) == m.end()) {
-            for(int j=i;j < v.size();j++){
-                if(v[i]==v[j]){
-                    count++;
-            }
-        }
-        m.insert(pair<int,int>(v[i],count));
-    }
-        count=0;
-    }
-    int flag=1;
-    count = 0;
-    map<int,int>::iterator it=m.begin();
-    map<int,int>::iterator i=it;
-    for(it; it != m.end(); it++){
-        for(i;i!=m.end();i++){
-            if(it->second==i->second){
-                count++;
-            }
-        }
-        if(count > 1) {
-            flag = 0;
-            break;
-        }
-        count = 0;
-    }
-    if(flag==0){
-            cout<<"false";
-        }
-    else{
-        cout<<"true";
-    }
 
+vector<int> prevsmaller(vector<int> v, int size) {
+    stack<int> s;
+    s.push(-1);
+    vector<int> ans(size);
+    for (int i = 0; i < size; i++) {
+        while (v[s.top()] >= v[i]) {
+            s.pop();
+        }
+        ans[i] = s.top();
+        s.push(i);
+    }
+    return ans;
+}
+
+vector<int> nextsmaller(vector<int> v, int size) {
+    stack<int> s;
+    s.push(size);
+    vector<int> ans(size);
+    for (int i = size - 1; i >= 0; i--) {
+        while (v[s.top()] > v[i]) {
+            s.pop();
+        }
+        ans[i] = s.top();
+        s.push(i);
+    }
+    return ans;
+}
+
+int largestarea(vector<int> v, int size) {
+    int maxans = 0;
+    vector<int> ps = prevsmaller(v, size);
+    vector<int> ns = nextsmaller(v, size);
+    for (int i = 0; i < size; i++) {
+        int breadth = ns[i] - ps[i] - 1;
+        int area = v[i] * breadth;
+        maxans = max(maxans, area);
+    }
+    return maxans;
+}
+
+int main() {
+    vector<int> v;
+    v.push_back(4);
+    v.push_back(2);
+    v.push_back(1);
+    v.push_back(5);
+    v.push_back(6);
+    v.push_back(3);
+    v.push_back(2);
+    v.push_back(4);
+    v.push_back(2);
+    int ans = largestarea(v, v.size());
+    cout << endl << ans << endl;
+    return 0;
 }
