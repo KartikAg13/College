@@ -56,9 +56,9 @@ void display(int **matrix, int rows, int columns) {
 }
 int main() {
     int n1, n2, n3;
-    cout << "Natural number 1:" << endl;
+    cout << "Natural number 1: ";
     cin >> n1;
-    cout << "Natural number 2:" << endl;
+    cout << "Natural number 2: ";
     cin >> n2;
     n3 = add(n1, n2);
     cout << "Natural number: " << n3 << endl;

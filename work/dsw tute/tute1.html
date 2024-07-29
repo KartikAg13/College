@@ -3,37 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q2</title>
+    <title>Q3</title>
     <style>
-        div{
-            font-size: 20px;
+        .box {
+            display: block;
+            justify-content: center;
+            width: 750px;
         }
         .heading {
-            text-decoration: underline;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        table, td, th, tr {
+            border: 1px solid black;
+        }
+        td, th {
+            padding: 5px;
         }
     </style>
 </head>
 <body>
-    <div>
-        <h3 class="heading">List of Courses</h3>
-        <h5>Programming Courses</h5>
-        <ol class="programming">
-            <li>Python</li>
-            <li>Java</li>
-            <li>C Programming</li>
-            <li>C++</li>
-            <li>Data Structure using C</li>
-        </ol>
-        <h5>Web Designing Course</h5>
-        <ul class="web">
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>Bootstrap</li>
-            <li>Java Script</li>
-            <li>JQuery</li>
-            <li>MySQL</li>
-            <li>PHP</li>
-        </ul>
+    <div class="box">
+        <table>
+            <caption class="heading">Basic Course</caption>
+            <tr>
+                <th>Sr. No</th>
+                <th>Course Name</th>
+                <th>Fees</th>
+                <th>Duration</th>
+                <th>Eligibility</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>CCC - Course on Computer Concept</td>
+                <td>2000</td>
+                <td>3 months</td>
+                <td>10th</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>CCA - Course on Computer Application</td>
+                <td>2000</td>
+                <td>3 months</td>
+                <td>10th</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Tally</td>
+                <td>3000</td>
+                <td>3 months</td>
+                <td>10th</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>O Level</td>
+                <td>15,000</td>
+                <td>1 Year</td>
+                <td>12th</td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>
