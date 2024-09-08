@@ -4,23 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .boxing {
+            display: flex;
+        }
+        .box{
+            background-color: blue;
+        }
+        nav span{
+            color:aliceblue;
+            font-weight:300;
+            margin-left:10px;
+        }
+        div div h3{
+            width:20vw;
+            background-color:grey;
+            text-indent:50px;
+        }
+        .box1{
+            background-color: lightgray;
+            width:20vw;
+        }
+        .box2 {
+            display: flex;
+            margin: 0 auto; /* Center the box horizontally */
+            margin-top:20px; /* Remove any top margin */
+            width: 100%; /* Ensure it takes the full width available */
+            text-align: center; /* Center align text inside */
+        }
+
+    </style>
 </head>
 <body>
-    <main>
-        <section>
+    <h1>Website Title</h1>
+    <nav class="box">
+            <span>Home</span>
+            <span>About Us</span>
+            <span>Contact</span>
+            <span>Resources</span>
+        </ul>
+    </nav>
+    <div class="boxing">
+        <div class="box1">
             <div>
-                <h1>why love html?</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, quasi.</p>
+                <h3>Menu Navigation</h2>
+                <ul type="disc">
+                    <li>Link1</li>
+                    <li>Link2</li>
+                    <li>Link3</li>
+                </ul>
             </div>
             <div>
-                <p>Lorem ipsum dolor sit amet.</p>
+                <h3>Useful Resources</h2>
+                <ul type="disc">
+                    <li>Link1</li>
+                    <li>Link2</li>
+                    <li>Link3</li>
+                </ul>
             </div>
-        </section>
-        <section>
-            <div>
-                <span>i am a span tag</span>
+        </div>
+        <div class="box2">
+            <div class="text">
+                <h2>LAB PRACTICE</h2>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sed eos placeat labore aspernatur ipsa, quaerat laborum dolor excepturi architecto at!</p>
             </div>
-        </section>
-    </main>
+            <div class="image">
+                <img src="aa.avif" alt="cannot load the image">
+            </div>
+        </div>
+    </div>
 </body>
 </html>
