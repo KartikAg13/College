@@ -52,27 +52,28 @@ void levelOrderTraversal(Node *root) {
     }
 }
 
-void inOrderTraversal(Node *root) {
+int inOrderTraversal(Node *root, int &count) {
     if(root == nullptr)
         return;
-    inOrderTraversal(root->left);
-    cout << root->data << " ";
-    inOrderTraversal(root->right);
+    inOrderTraversal(root->left, count);
+    if(root->left == nullptr && root->right == nullptr)
+        count++;
+    inOrderTraversal(root->right, count);
 }
 
 void preOrderTraversal(Node *root) {
     if(root == nullptr)
         return;
     cout << root->data << " ";
-    inOrderTraversal(root->left);
-    inOrderTraversal(root->right);
+    preOrderTraversal(root->left);
+    preOrderTraversal(root->right);
 }
 
 void postOrderTraversal(Node *root) {
     if(root == nullptr)
         return;
-    inOrderTraversal(root->left);
-    inOrderTraversal(root->right);
+    postOrderTraversal(root->left);
+    postOrderTraversal(root->right);
     cout << root->data << " ";
 }
 
@@ -83,21 +84,40 @@ void buildFromLevelOrder(Node * &root) {
     cin >> value;
     root = new Node(value);
     q.push(root);
-    while(1);
+    while(q.empty() == false) {
+        Node *temp = q.front();
+        q.pop();
+        cout << "Please enter the data for left of " << temp->data << ": ";
+        cin >> value;
+        if(value != -1) {
+            temp->left = new Node(value);
+            q.push(temp->left);
+        }
+        cout << "Please enter the data for right of " << temp->data << ": ";
+        cin >> value;
+        if(value != -1) {
+            temp->right = new Node(value);
+            q.push(temp->right);
+        }
+    }
+}
+
+int noOfLeafNodes(Node *root) {
+    int count = 0;
+    inOrderTraversal(root, count);
+    return count;
 }
 
 int main() {
+    Node *root = nullptr;
+
     cout << "Please enter the value for root of the tree: ";
     // 1 3 7 -1 -1 11 -1 -1 5 17 -1 -1 -1
     Node *root = buildTree(root);
 
     cout << endl << "Level Order Traversal:" << endl;
     levelOrderTraversal(root);
-    
-    // 7 3 11 1 17 5
-    cout << endl << "In Order Traversal:" << endl;
-    inOrderTraversal(root);
-    
+        
     // 1 7 3 11 17 5
     cout << endl << endl << "Pre Order Traversal: " << endl;
     preOrderTraversal(root);
@@ -105,7 +125,10 @@ int main() {
     // 7 3 11 17 5 1
     cout << endl << endl << "Post Order Traversal: " << endl;
     postOrderTraversal(root);
-
     cout << endl;
+
+    buildFromLevelOrder(root);
+    cout << endl;
+    levelOrderTraversal(root);
     return 0;
 }

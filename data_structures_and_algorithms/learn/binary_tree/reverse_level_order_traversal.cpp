@@ -1,7 +1,7 @@
 //lecture 62
 
 #include <iostream>
-#include <stack>
+#include <vector>
 using namespace std;
 
 class Node {
@@ -31,19 +31,28 @@ Node *buildTree(Node *root) {
 }
 
 void reverseLevelOrderTraversal(Node *root) {
-    stack<Node *> s;
-    s.push(root);
-    s.push(nullptr);
+    vector<Node *> v;
+    int index = 0;
+    v.push_back(root);
+    v.push_back(nullptr);
     while(true) {
-        Node *temp = s.top();
-        if(temp == nullptr && s.empty() == false)
-            s.push(nullptr);
-        else {
-            if(temp->left != nullptr)
-                s.push(temp->left);
-            if(temp->right != nullptr)
-                s.push(temp->right);
+        if(v[index] != nullptr) {
+            if(v[index]->right != nullptr)
+                v.push_back(v[index]->right);
+            if(v[index]->left != nullptr)
+                v.push_back(v[index]->left);
+            if(v[index]->right == nullptr && v[index]->left == nullptr)
+                break; 
         }
+        if(v[index] == nullptr)
+            v.push_back(nullptr);
+        index++;
+    }
+    for(int i = v.size() - 1; i >= 0; i--) {
+        if(v[i] == nullptr)
+            cout << endl;
+        else
+            cout << v[i]->data << " ";
     }
 }
 
@@ -51,6 +60,7 @@ int main() {
     cout << "Please enter the value for root of the tree: ";
     // 1 3 7 -1 -1 11 -1 -1 5 17 -1 -1 -1
     Node *root = buildTree(root);
-    cout << endl << "Revrese Level Order Traversal:" << endl;
+    cout << endl << "Reverse Level Order Traversal:" << endl;
+    reverseLevelOrderTraversal(root);
     return 0;
 }
