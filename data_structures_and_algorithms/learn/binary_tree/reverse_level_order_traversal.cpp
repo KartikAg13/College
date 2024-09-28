@@ -44,7 +44,7 @@ void reverseLevelOrderTraversal(Node *root) {
             if(v[index]->right == nullptr && v[index]->left == nullptr)
                 break; 
         }
-        if(v[index] == nullptr)
+        else
             v.push_back(nullptr);
         index++;
     }

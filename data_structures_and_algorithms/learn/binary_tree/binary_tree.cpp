@@ -1,5 +1,6 @@
-//lecture 62
+// lecture 62
 
+#include <cmath>
 #include <iostream>
 #include <queue>
 using namespace std;
@@ -52,7 +53,7 @@ void levelOrderTraversal(Node *root) {
     }
 }
 
-int inOrderTraversal(Node *root, int &count) {
+void inOrderTraversal(Node *root, int &count) {
     if(root == nullptr)
         return;
     inOrderTraversal(root->left, count);
@@ -80,7 +81,7 @@ void postOrderTraversal(Node *root) {
 void buildFromLevelOrder(Node * &root) {
     queue <Node *> q;
     int value = 0;
-    cout << "Please enter the value for the root of the tree: ";
+    cout << endl << "Please enter the value for the root of the tree: ";
     cin >> value;
     root = new Node(value);
     q.push(root);
@@ -109,26 +110,31 @@ int noOfLeafNodes(Node *root) {
 }
 
 int main() {
-    Node *root = nullptr;
-
     cout << "Please enter the value for root of the tree: ";
     // 1 3 7 -1 -1 11 -1 -1 5 17 -1 -1 -1
     Node *root = buildTree(root);
 
-    cout << endl << "Level Order Traversal:" << endl;
+    // 1
+    // 3 5
+    // 7 11 17
+    cout << "Level Order Traversal:" << endl;
     levelOrderTraversal(root);
-        
+
     // 1 7 3 11 17 5
     cout << endl << endl << "Pre Order Traversal: " << endl;
     preOrderTraversal(root);
-    
+
     // 7 3 11 17 5 1
     cout << endl << endl << "Post Order Traversal: " << endl;
     postOrderTraversal(root);
     cout << endl;
 
-    buildFromLevelOrder(root);
-    cout << endl;
-    levelOrderTraversal(root);
+    Node *tree = nullptr;
+    // 1 3 5 7 11 17 -1 -1 -1 -1 -1 -1 -1
+    buildFromLevelOrder(tree);
+    cout << endl << "Level Order Traversal:" << endl;
+    levelOrderTraversal(tree);
+
+    cout << endl << "Number of leaf nodes: " << noOfLeafNodes(tree) << endl;
     return 0;
 }

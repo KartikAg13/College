@@ -1,20 +1,9 @@
 {
-    "files.associations": {
-        "ostream": "cpp",
-        "iostream": "cpp",
-        "array": "cpp",
-        "string": "cpp",
-        "vector": "cpp",
-        "limits": "cpp",
-        "*.tcc": "cpp",
-        "new": "cpp",
-        "iosfwd": "cpp"
-    },
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.typeCheckingMode": "strict",
-    "rust-analyzer.linkedProjects": [
-        "./learn_rust/Cargo.toml",
-        "./learn_rust/Cargo.toml"
-    ],
-    "rust-analyzer.showUnlinkedFileNotification": false
+  "files.associations": {
+    "*.tcc": "cpp"
+  },
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "strict",
+  "rust-analyzer.linkedProjects": ["./learn_rust/Cargo.toml"],
+  "rust-analyzer.showUnlinkedFileNotification": false
 }
