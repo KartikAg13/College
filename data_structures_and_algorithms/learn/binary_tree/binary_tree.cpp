@@ -1,6 +1,5 @@
 // lecture 62
 
-#include <cmath>
 #include <iostream>
 #include <queue>
 using namespace std;
