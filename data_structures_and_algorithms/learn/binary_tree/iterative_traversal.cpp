@@ -36,12 +36,15 @@ void inOrderTraversal(Node *root) {
     stack<Node *> s;
     map<Node *, bool> m;
     Node *temp = root;
-    if(temp != nullptr)
+    if(temp != nullptr) {
         s.push(temp);
-    m[temp] = true;
+        m[temp] = true;
+    }
+    else
+        return;
     while(s.empty() == false) {
         temp = s.top();
-        if(temp->left != nullptr && m[temp->left] == false) {
+        if(temp->left != nullptr && m.find(temp->left) == m.end()) {
             s.push(temp->left);
             m[temp->left] = true;
         }
@@ -49,11 +52,14 @@ void inOrderTraversal(Node *root) {
             if(temp->left == nullptr && temp->right == nullptr) {
                 cout << temp->data << " ";
                 s.pop();
-                temp = s.top();
+                if(s.empty() == true)
+                    break;
+                else
+                    temp = s.top();
             }
             cout << temp->data << " ";
             s.pop();
-            if(temp->right != nullptr) {
+            if(temp->right != nullptr && m.find(temp->right) == m.end()) {
                 s.push(temp->right);
                 m[temp->right] = true;
             }
@@ -64,28 +70,36 @@ void inOrderTraversal(Node *root) {
 // NLR
 void preOrderTraversal(Node *root) {
     stack<Node *> s;
-    map<Node *, int> m;
+    map<Node *, bool> m;
     Node *temp = root;
-    if(temp != nullptr)
+    if(temp != nullptr) {
         s.push(temp);
-    m[temp] = 1;
+        m[temp] = false;
+    }
+    else
+        return;
     while(s.empty() == false) {
         temp = s.top();
-        if(m[temp] != 2) {
+        if(m[temp] == false) {
             cout << temp->data << " ";
-            m[temp] = 2;
+            m[temp] = true;
         }
         if(temp->left != nullptr && m.find(temp->left) == m.end()) {
             s.push(temp->left);
-            m[temp] = 1;
+            m[temp->left] = false;
         }
         else {
+            if(temp->left == nullptr && temp->right == nullptr) {
+                s.pop();
+                if(s.empty() == true)
+                    break;
+                else
+                    temp = s.top();
+            }
             s.pop();
-            temp = s.top();
-            s.pop();
-            if(temp->right != nullptr) {
+            if(temp->right != nullptr && m.find(temp->right) == m.end()) {
                 s.push(temp->right);
-                m[temp] = 1;
+                m[temp] = false;
             }
         }
     }
@@ -96,22 +110,27 @@ void postOrderTraversal(Node *root) {
     stack<Node *> s;
     map<Node *, bool> m;
     Node *temp = root;
-    if(temp != nullptr)
+    if(temp != nullptr) {
         s.push(temp);
-    m[temp] = true;
+        m[temp] = true;
+    }
+    else
+        return;
     while(s.empty() == false) {
         temp = s.top();
-        if(temp->left != nullptr && m[temp->left] == false) {
+        if(temp->left != nullptr && m.find(temp->left) == m.end()) {
             s.push(temp->left);
             m[temp->left] = true;
         }
         else {
-            cout << temp->data << " ";
-            s.pop();
-            temp = s.top();
-            if(temp->right != nullptr && m[temp->right] == false) {
+            if(temp->right != nullptr && m.find(temp->right) == m.end()) {
                 s.push(temp->right);
                 m[temp->right] = true;
+                continue;
+            }
+            else {
+                cout << temp->data << " ";
+                s.pop();
             }
         }
     }
@@ -119,16 +138,18 @@ void postOrderTraversal(Node *root) {
 
 int main() {
     cout << "Please enter the value for root of the tree: ";
-    // 1 3 7 -1 -1 11 -1 -1 5 17 -1 -1 -1
+    // 1 2 4 8 -1 -1 -1 5 -1 9 -1 -1 3 6 -1 -1 7 -1 10 -1 -1
     Node *root = buildTree(root);
 
-    // 7 3 11 1 17 5
+    // 8 4 2 5 9 1 6 3 7 10
     cout << endl << endl << "In Order Traversal: " << endl;
     inOrderTraversal(root);
 
+    // 1 2 4 8 5 9 3 6 7 10
     cout << endl << "Pre Order Traversal: " << endl;
     preOrderTraversal(root);
 
+    // 8 4 9 5 2 6 10 7 3 1
     cout << endl << "Post Order Traversal: " << endl;
     postOrderTraversal(root);
 

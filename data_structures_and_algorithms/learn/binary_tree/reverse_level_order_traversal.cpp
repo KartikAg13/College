@@ -1,6 +1,7 @@
 //lecture 62
 
 #include <iostream>
+#include <queue>
 #include <vector>
 using namespace std;
 
@@ -30,37 +31,78 @@ Node *buildTree(Node *root) {
     return root;
 }
 
+void levelOrderTraversal(Node *root) {
+    queue<Node *> q;
+    q.push(root);
+    q.push(nullptr);
+    while(q.empty() == false) {
+        Node *temp = q.front();
+        q.pop();
+        if(temp == nullptr) {
+            cout << endl;
+            if(q.empty() == false)
+                q.push(nullptr);
+        }
+        else {
+            cout << temp->data << " ";
+            if(temp->left != nullptr)
+                q.push(temp->left);
+            if(temp->right != nullptr)
+                q.push(temp->right);
+        }
+    }
+}
+
 void reverseLevelOrderTraversal(Node *root) {
     vector<Node *> v;
     int index = 0;
-    v.push_back(root);
-    v.push_back(nullptr);
-    while(true) {
-        if(v[index] != nullptr) {
-            if(v[index]->right != nullptr)
-                v.push_back(v[index]->right);
-            if(v[index]->left != nullptr)
-                v.push_back(v[index]->left);
-            if(v[index]->right == nullptr && v[index]->left == nullptr)
-                break; 
+    Node *temp = root;
+    if(temp != nullptr) {
+        v.push_back(temp);
+        v.push_back(nullptr);
+    }
+    else
+        return;
+    while(index < v.size()) {
+        temp = v[index];
+        if(temp != nullptr) {
+            if(temp->right != nullptr)
+                v.push_back(temp->right);
+            if(temp->left != nullptr)
+                v.push_back(temp->left);
         }
-        else
+        else if(temp == nullptr && v[v.size() - 1] != nullptr)
             v.push_back(nullptr);
         index++;
     }
-    for(int i = v.size() - 1; i >= 0; i--) {
-        if(v[i] == nullptr)
+    int length = v.size() - 2;
+    for(int index = length; index >= 0; index--) {
+        if(v[index] == nullptr)
             cout << endl;
         else
-            cout << v[i]->data << " ";
+            cout << v[index]->data << " ";
     }
 }
 
 int main() {
     cout << "Please enter the value for root of the tree: ";
-    // 1 3 7 -1 -1 11 -1 -1 5 17 -1 -1 -1
+    // 1 2 4 8 -1 -1 -1 5 -1 9 -1 -1 3 6 -1 -1 7 -1 10 -1 -1
     Node *root = buildTree(root);
+
+    // 1
+    // 2 3
+    // 4 5 6 7
+    // 8 9 10
+    cout << endl << "Level Order Traversal:" << endl;
+    levelOrderTraversal(root);
+
+    // 8 9 10
+    // 4 5 6 7
+    // 2 3
+    // 1
     cout << endl << "Reverse Level Order Traversal:" << endl;
     reverseLevelOrderTraversal(root);
+
+    cout << endl;
     return 0;
 }
