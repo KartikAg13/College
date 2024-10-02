@@ -6,6 +6,13 @@
 #include <vector>
 using namespace std;
 
+class Node;
+vector<int> zigZagTraversal(Node *);
+vector<int> boundaryTraversal(Node *);
+vector<int> verticalOrder(Node *);
+vector<int> topView(Node *);
+void leftView(Node *, vector<int> &, int);
+
 class Node {
     public:
     int data;

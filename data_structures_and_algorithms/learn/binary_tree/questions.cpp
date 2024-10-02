@@ -3,6 +3,13 @@
 #include <iostream>
 using namespace std;
 
+class Node;
+int height(Node *);
+int diameter(Node *);
+bool isBalanced(Node *);
+bool isIdentical(Node *);
+pair<bool, int> isSumTree(Node *);
+
 class Node {
     public:
     int data;
