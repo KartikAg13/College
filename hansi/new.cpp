@@ -1,79 +1,89 @@
-#include <iostream>
+#include<iostream>
+#include<stack>
+#include<queue>
+#include<map>
 using namespace std;
 class node{
     public:
     int data;
-    node* next;
+    node* left;
+    node* right;
     node(int data){
         this->data=data;
-        this->next=NULL;
+        this->left=NULL;
+        this->right=NULL;
     }
 };
-node* insertnode(node*&head,int value){
-    node* temp=new node(value);
-    if(head==NULL){
-        head=temp;
-        head->next=head;
+node* binarytree(node* root){
+    int data;
+    cin>>data;
+    root=new node(data);
+    if(data==-1){
+        return NULL;
     }
-    node*curr=head;
-    while(curr->next!=head){
-        curr=curr->next;
-    }
-    curr->next=temp;
-    temp->next=head;
-    return head;
+    cout<<"enter the data for left of node "<<data;
+    root->left=binarytree(root->left);
+    cout<<"enter the data for right of node "<<data;
+    root->right=binarytree(root->right);
+    return root;
 }
-void oddeven(node*head){
-    node* temp=head;
-    node* e=new node(-1);
-    node* even=e;
-    node* o=new node(-1);
-    node* odd=o;
-    while(temp->next!=head){
-        if(temp->data%2==0){
-            e->next=new node(temp->data);
-            e=e->next;
+void visitednodes(node* root, map<node*,bool>&visited) {
+    queue<node*> q;
+    q.push(root);
+    visited[root] =false;  // Root has no parent
+
+    while(!q.empty()) {
+        node* front = q.front();
+        visited[front]=false;
+        q.pop();
+
+        if(front->left) {
+            q.push(front->left);
+        }
+
+        if(front->right) {
+            q.push(front->right);
+        }
+    }
+}
+void inorder(node*root,map<node*,bool>&visited){
+    stack<node*>s;
+    s.push(root);
+    while(!s.empty()){
+        if(root->left!=NULL &&visited[root]==false){
+            visited[root]=true;
+            root=root->left;
+            s.push(root);
         }
         else{
-            o->next=new node(temp->data);
-            o=o->next;
+            if(root->left==NULL && root->right==NULL){
+                cout<<root->data<<" ";
+            }
+            root=s.top();
+            cout<<root->data<<" ";
+            s.pop();
+            s.push(root->right);
         }
-        temp=temp->next;
-    }
-    if(temp->data%2==0){
-        e->next=new node(temp->data);
-    }
-    else{
-        o->next=new node(temp->data);
-    }
-    even=even->next;
-    odd=odd->next;
-    e->next=even;
-    o->next=odd;
-   
-    node* temp1=even;
-    node*temp2=odd;
-    while(temp1->next!=even){
-        cout<<temp1->data<<" ";
-        temp1=temp1->next;
-    }
-    cout<<endl;
-    while(temp2->next!=odd){
-        cout<<temp2->data<<" ";
-        temp2=temp2->next;
     }
 }
 
-int main() {
-   node* node1=new node(1);
-   node* head=node1;
-   node1->next=insertnode(head,2);
-   node1->next=insertnode(head,3);
-   node1->next=insertnode(head,4);
-   node1->next=insertnode(head,5);
-   node1->next=insertnode(head,6);
-   node1->next=insertnode(head,9);
-   node1->next=insertnode(head,11);
-   oddeven(head);
+void preOrderTraversal(node *root) {
+    if(root == nullptr)
+        return;
+    cout << root->data << " ";
+    preOrderTraversal(root->left);
+    preOrderTraversal(root->right);
 }
 
+int main(){
+    node* root=NULL;
+    // 1 3 7 -1 -1 11 -1 -1 5 17 -1 -1 -1
+    root=binarytree(root);
+    cout << endl;
+    // preOrderTraversal(root);
+    map<node*,bool>visited;
+    visitednodes(root,visited);
+    inorder(root,visited);
+    cout << endl;
+    return 0;
+}
