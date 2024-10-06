@@ -4,7 +4,6 @@
 #include <climits>
 #include <iostream>
 #include <utility>
-#include <valarray>
 #include <vector>
 using namespace std;
 
