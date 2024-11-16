@@ -96,6 +96,15 @@ Node *preOrderToBST(vector<int> preorder, int minimum, int maximum, int &index) 
     return root;
 }
 
+Node *postOrderToBST(vector<int> postorder, int minimum, int maximum, int &index) {
+    if(index < 0 || postorder[index] < minimum || postorder[index] > maximum)
+        return nullptr;
+    Node *root = new Node(postorder[index--]);
+    root->right = postOrderToBST(postorder, root->data, maximum, index);
+    root->left = postOrderToBST(postorder, minimum, root->data, index);
+    return root;
+}
+
 int main() {
     return 0;
 }

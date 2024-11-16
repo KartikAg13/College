@@ -40,7 +40,7 @@ Node *preOrderToTree(int in[], int pre[], int &index, int inOrderStart, int inOr
         return nullptr;
     int element = pre[index++];
     Node *root = new Node(element);
-    int position = nodeToIndex[index];
+    int position = nodeToIndex[element];
     root->left = preOrderToTree(in, pre, index, inOrderStart, position - 1, n, nodeToIndex);
     root->right = preOrderToTree(in, pre, index, position + 1, inOrderEnd, n, nodeToIndex);
     return root;

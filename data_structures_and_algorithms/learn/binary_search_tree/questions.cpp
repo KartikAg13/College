@@ -1,6 +1,7 @@
 // lecture 70
 
 #include <iostream>
+using namespace std;
 
 class Node;
 bool validateBST(Node *, int, int);
