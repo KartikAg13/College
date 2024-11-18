@@ -38,7 +38,7 @@ void prepareAdjList(unordered_map<int, set<int>> &adjList, vector<pair<int, int>
     }
 }
 
-void bfs(unordered_map<int, set<int>> adjList, unordered_map<int, bool> visited, vector<int> result, int node) {
+void bfs(unordered_map<int, set<int>> adjList, unordered_map<int, bool> visited, vector<int> &result, int node) {
     queue<int> q;
     q.push(node);
     visited[node] = true;
@@ -47,9 +47,10 @@ void bfs(unordered_map<int, set<int>> adjList, unordered_map<int, bool> visited,
         q.pop();
         result.push_back(frontNode);
         for(auto index: adjList[frontNode]) {
-            if(visited[index] == false)
+            if(visited[index] == false) {
                 q.push(index);
                 visited[index] = true;
+            }
         }
     }
 }
