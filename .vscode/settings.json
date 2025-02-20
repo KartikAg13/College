@@ -1,6 +1,7 @@
 {
   "files.associations": {
-    "*.tcc": "cpp"
+    "*.tcc": "cpp",
+    "vector": "cpp"
   },
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "strict",
