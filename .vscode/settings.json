@@ -1,7 +1,17 @@
 {
   "files.associations": {
     "*.tcc": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "charconv": "cpp",
+    "optional": "cpp",
+    "format": "cpp",
+    "ratio": "cpp",
+    "system_error": "cpp",
+    "array": "cpp",
+    "functional": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "utility": "cpp"
   },
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "strict",
