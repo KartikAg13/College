@@ -32,8 +32,21 @@ int memoization(vector<int> &weights, vector<int> &prices, int capacity, int ind
 	}
 }
 
-int tabulation(vector<int> &weights, vector<int> &prices, int capacity, int index, vector<vector<int>> &table) {
-	
+int tabulation(vector<int> &weights, vector<int> &prices, int capacity) {
+	int length = weights.size();
+	vector<vector<int>> table(length + 1, vector<int>(capacity + 1, 0));
+	for(int i = 0; i < length; i++) {
+		for(int c = 0; c <= capacity; c++) {
+			if(weights[i] > c) 
+				table[i + 1][c] = table[i][c];
+			else {
+				int include = prices[i] + table[i][c - weights[i]];
+				int exclude = table[i][c];
+				table[i + 1][c] = max(include, exclude);
+			}
+		}
+	}
+	return table[length][capacity];
 }
 
 int main() {
@@ -48,5 +61,8 @@ int main() {
 	vector<vector<int>> table(length + 1, vector<int>(capacity + 1, -1));
 	result = memoization(weights, prices, capacity, index, table);
 	cout << "Memoization: " << result << endl;
+
+	result = tabulation(weights, prices, capacity);
+	cout << "Tabulation: " << result << endl;
 	return 0;
 }
