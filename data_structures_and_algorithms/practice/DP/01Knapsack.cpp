@@ -49,6 +49,19 @@ int tabulation(vector<int> &weights, vector<int> &prices, int capacity) {
 	return table[length][capacity];
 }
 
+int optimization(vector<int> &weights, vector<int> &prices, int capacity) {
+	int length = weights.size();
+	vector<int> table(capacity + 1, 0);
+	for(int i = 0; i < length; i++) {
+		for(int c = capacity; c >= weights[i]; c--) {
+			int include = prices[i] + table[c - weights[i]];
+			int exclude = table[c];
+			table[c] = max(include, exclude);
+		}
+	}
+	return table[capacity];
+}
+
 int main() {
 	vector<int> weights = {3, 1, 2, 4, 6};
 	vector<int> prices = {7, 2, 1, 6, 12};
@@ -64,5 +77,8 @@ int main() {
 
 	result = tabulation(weights, prices, capacity);
 	cout << "Tabulation: " << result << endl;
+
+	result = optimization(weights, prices, capacity);
+	cout << "Optimization: " << result << endl; 
 	return 0;
 }
